@@ -1,0 +1,348 @@
+
+
+// import React, { useState, useEffect, useMemo } from "react";
+// import { AppBar, Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Container, Divider, Grid, IconButton, Paper, Tab, Tabs, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography, CardMedia } from "@mui/material";
+// import { QrCode as QrCodeIcon, Printer as PrintIcon, RefreshCw as RefreshIcon, ArrowBigUp as ArrowBackIcon, Search, Camera, ScanQrCode as QrCodeScanner, Settings } from "lucide-react";
+// import qr from "./../../assets/qr.png";
+// import ScanCard from './ScanCard';
+// import { diamondData } from "./data";
+// import { useTagContext } from "../../context/TagContext";
+
+
+
+// function Home() {
+//   const [scanValue, setScanValue] = useState("");
+//   const [scanning, setScanning] = useState(false);
+//   const [showAll, setShowAll] = useState(false);
+//   const [qrImageVisible, setQrImageVisible] = useState(false);
+//   const [SelectedDiamond, setSelectedDiamond] = useState(null);
+//   const {GetTagReport} = useTagContext()
+
+//   useEffect(() => {
+//     const scanned = diamondData.find((d) => d.id.toString() === scanValue?.split("/")[0]);
+//     if (scanned) {
+//       setSelectedDiamond(scanned);
+//     }
+//   }, [scanValue, qrImageVisible, SelectedDiamond]);
+
+//   const startScan = () => {
+//     const availableIds = diamondData.map((d) => parseInt(d.id));
+//     const randomId = availableIds[Math.floor(Math.random() * availableIds.length)];
+//     const randomIdWithSuffix = `${randomId}/270286`;
+//     setQrImageVisible(true);
+//     setScanning(true);
+//     setTimeout(() => {
+//       setScanValue(randomIdWithSuffix);
+//       setShowAll(false);
+//       setScanning(false);
+//     }, 2000);
+//   };
+
+//   return (
+//     <Box
+//       sx={{
+//         width: "100%",
+//         overflow: "hidden",
+//       }}
+//     >
+//       <Box sx={{ p: 3 }}>
+//         <Grid container spacing={3}>
+//           <Grid item xs={12} md={4}>
+//             <Paper
+//               elevation={3}
+//               sx={{
+//                 p: 2,
+//               }}
+//             >
+//               <Typography variant="h6" mb={3} fontWeight="bold" gutterBottom>
+//                 Scan Item
+//               </Typography>
+//               <TextField fullWidth label="Scan Code" variant="outlined" value={scanValue} onChange={(e) => setScanValue(e.target.value)} sx={{ mb: 2 }} />
+
+//               <Box sx={{ display: "flex", gap: 2, flexDirection: "column", alignItems: "center" }}>
+//                 {qrImageVisible && <CardMedia component="img" image={qr} alt="QR Preview" sx={{ width: 200, height: 200, objectFit: "contain", mb: 2 }} />}
+
+//                 <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
+//                   <Button
+//                     variant="contained"
+//                     startIcon={<QrCodeScanner />}
+//                     onClick={startScan}
+//                     disabled={scanning}
+//                     fullWidth
+//                     sx={{
+//                       py: 1.2,
+//                       textTransform: "none",
+//                       fontWeight: 600,
+//                       backgroundColor: scanning ? "#ccc" : "#",
+//                       "&:hover": { backgroundColor: scanning ? "#ccc" : "#" },
+//                     }}
+//                   >
+//                     {scanning ? "Scanning..." : "Start Scan (F2)"}
+//                   </Button>
+//                   <Button variant="outlined" startIcon={<Camera />} sx={{ py: 1.2, px: 3, textTransform: "none" }}>
+//                     Camera
+//                   </Button>
+//                 </Box>
+//               </Box>
+
+//               {scanValue && (
+//                 <Alert severity="info" sx={{ mt: 2, borderRadius: 2 }}>
+//                   Place the item tag in front of the scanner...
+//                 </Alert>
+//               )}
+//             </Paper>
+//           </Grid>
+
+//           {/* Right Panel - Results */}
+          // <Grid item xs={12} md={8}>
+          //   <Paper
+          //     elevation={3}
+          //     sx={{
+          //       p: 3,
+          //       borderRadius: 2,
+          //       bgcolor: "#fff",
+          //       boxShadow: "0px 2px 8px rgba(0,0,0,0.05)",
+          //     }}
+          //   >
+          //     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          //       <Typography variant="h6">Item Information</Typography>
+
+          //       {scanValue && (
+          //         <Typography variant="subtitle2" color="primary">
+          //           ID: {scanValue}
+          //         </Typography>
+          //       )}
+          //     </Box>
+          //     {!scanning && (!scanValue || !SelectedDiamond) && !showAll ? (
+          //       <Box sx={{ textAlign: "center", mb: 2 }}>
+          //         <Box
+          //           sx={{
+          //             display: "flex",
+          //             flexDirection: "column",
+          //             justifyContent: "center",
+          //             alignItems: "center",
+          //             textAlign: "center",
+          //             py: 6,
+          //             px: 2,
+          //             height: "100%",
+          //             minHeight: "600px",
+          //           }}
+          //         >
+          //           <Typography variant="h6" gutterBottom fontWeight="bold">
+          //             No Diamond Scanned Yet
+          //           </Typography>
+          //           <Typography variant="body1" color="text.secondary" paragraph>
+          //             Please scan a diamond tag or enter an ID manually to view details.
+          //           </Typography>
+          //           <Button variant="contained" startIcon={<QrCodeScanner />} onClick={startScan} disabled={scanning} sx={{ textTransform: "none" }}>
+          //             {scanning ? "Scanning..." : "Start Scan"}
+          //           </Button>
+          //         </Box>
+          //       </Box>
+          //     ) : null}
+          //     {scanning && (
+          //       <Box
+          //         sx={{
+          //           display: "flex",
+          //           flexDirection: "column",
+          //           justifyContent: "center",
+          //           alignItems: "center",
+          //           textAlign: "center",
+          //           py: 6,
+          //           px: 2,
+          //           height: "100%",
+          //           minHeight: "800px",
+          //         }}
+          //       >
+          //         <CircularProgress size={50} thickness={4} color="primary" />
+          //         <Typography variant="h6" mt={2} fontWeight="500">
+          //           Scanning...
+          //         </Typography>
+          //         <Typography variant="body2" color="text.secondary" mt={1}>
+          //           Please wait while we detect the item.
+          //         </Typography>
+          //       </Box>
+          //     )}
+          //     {!scanning && !showAll && SelectedDiamond && (
+          //       <>
+          //         <Box
+          //           sx={{
+          //             textAlign: "center",
+          //             mb: 3,
+          //             p: 2,
+          //             bgcolor: "#f0f8ff",
+          //             borderRadius: 2,
+          //             border: "1px solid #e0eafc",
+          //           }}
+          //         >
+          //           <Typography variant="h6" fontWeight="bold" color="primary">
+          //             Matched Designs Found!
+          //           </Typography>
+          //           <Typography variant="body2" color="text.secondary" gutterBottom>
+          //             Showing result for scanned item
+          //           </Typography>
+          //           <Button size="small" variant="contained" color="primary" sx={{ mt: 1, textTransform: "none" }} onClick={() => setShowAll(true)}>
+          //             Show More Designs
+          //           </Button>
+          //         </Box>
+
+          //         <Card
+          //           sx={{
+          //             mb: 4,
+          //             borderRadius: 3,
+          //             boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.08)",
+          //             overflow: "hidden",
+          //             transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          //             "&:hover": {
+          //               transform: "translateY(-4px)",
+          //               boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
+          //             },
+          //             bgcolor: "#fff",
+          //             border: "1px solid #e0e0e0",
+          //             display: "flex",
+          //             flexDirection: { xs: "column", md: "row" }, 
+          //           }}
+          //         >
+          //           <Container sx={{ flexGrow: 1, py: 3, overflow: "auto" }}>
+          //               <Grid container spacing={3}>
+          //                 {/* Left: Product Image */}
+          //                 <Grid item xs={12} md={4} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          //                   <Typography variant="h6" gutterBottom>
+          //                     Product Image
+          //                   </Typography>
+          //                   <Box
+          //                     component="img"
+          //                     src={SelectedDiamond?.image || "https://cdn.caratlane.com/media/catalog/product/S/R/SR03489-WGP900_1_lar.jpg"}
+          //                     alt="Diamond"
+          //                     sx={{
+          //                       width: "100%",
+          //                       maxWidth: 300,
+          //                       border: 1,
+          //                       borderColor: "divider",
+          //                       borderRadius: 1,
+          //                     }}
+          //                   />
+          //                 </Grid>
+
+          //                 {/* Right: Product Details */}
+          //                 <Grid item xs={12} md={8}>
+          //                   <Typography variant="h6" gutterBottom>
+          //                     Diamond Details
+          //                   </Typography>
+
+          //                   <Grid container spacing={2}>
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Karat/Type
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.karat}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Color
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.color}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Clarity
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.clarity}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Stone
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.stone}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Code
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.code}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Base Price
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium" color="primary">
+          //                           {SelectedDiamond?.price.toLocaleString()}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+
+          //                     <Grid item xs={12} sm={6}>
+          //                       <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          //                         <Typography variant="caption" color="text.secondary">
+          //                           Price (incl. tax)
+          //                         </Typography>
+          //                         <Typography variant="body1" fontWeight="medium">
+          //                           {SelectedDiamond?.priceWithTax.toLocaleString()}
+          //                         </Typography>
+          //                       </Box>
+          //                     </Grid>
+          //                   </Grid>
+
+          //                   <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
+          //                     <Button variant="contained" startIcon={<PrintIcon />}>
+          //                       Print Details
+          //                     </Button>
+          //                   </Box>
+          //                 </Grid>
+          //               </Grid>
+          //           </Container>
+          //         </Card>
+          //       </>
+          //     )}
+          //     {showAll && (
+          //       <>
+          //         <Box sx={{ textAlign: "center", mb: 2 }}>
+          //           <Typography variant="body2" color="text.secondary">
+          //             Showing all available designs
+          //           </Typography>
+          //           <Button size="small" variant="outlined" sx={{ mt: 1, textTransform: "none" }} onClick={() => setShowAll(false)}>
+          //             Back to Scanned Item
+          //           </Button>
+          //         </Box>
+          //         <Grid container spacing={3}>
+          //           {diamondData.slice(0, 12).map((diamond) => (
+          //             <ScanCard key={diamond.id} diamond={diamond} />
+          //           ))}
+          //         </Grid>
+          //       </>
+          //     )}
+          //   </Paper>
+          // </Grid>
+//         </Grid>
+//       </Box>
+//     </Box>
+//   );
+// }
+
+// export default Home;
