@@ -2,9 +2,11 @@ import Cookies from "js-cookie";
 
 export async function readAndDecodeCookie(cookieName) {
   const rawCookie = Cookies.get(cookieName);
+  // console.log(rawCookie  , "rawCookie")
   if (!rawCookie) return null;
   try {
     const decodedURI = decodeURIComponent(rawCookie);
+    // console.log(decodedURI , "decodedURI")
     const parsedObj = JSON.parse(decodedURI);
 
     const safeBase64Decode = (val) => {
