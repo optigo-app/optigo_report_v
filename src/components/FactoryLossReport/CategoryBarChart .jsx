@@ -32,7 +32,7 @@ const CategoryBarChart = ({ categoryAnalysis }) => {
         Category-wise Percentage
       </Typography>
 
-      <Box sx={{  height: 350, overflowY: "auto" }}>
+      <Box sx={{  height: 340, overflowY: "auto" }}>
         <ResponsiveContainer width="100%" height={formattedData.length * 45}>
           <BarChart data={formattedData} layout="vertical" margin={{ top: 10, right: 30, left: 0, bottom: 10 }}>
             <defs>

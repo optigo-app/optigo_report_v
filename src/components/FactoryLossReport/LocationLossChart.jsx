@@ -45,7 +45,7 @@ const Dashboard = ({ locationAnalysis }) => {
   const tooltipBorder = "#D1D5DB"; // Tooltip border
   const tooltipText = "#111827"; // Tooltip text color
 
-  console.log(locationAnalysis, "locationAnalysis");
+  // console.log(locationAnalysis, "locationAnalysis");
 
   return (
     <>
@@ -53,7 +53,7 @@ const Dashboard = ({ locationAnalysis }) => {
         Cell Wise Loss
       </Typography>
 
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={340}>
         <ComposedChart data={chartData}>
           <defs>
             <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
