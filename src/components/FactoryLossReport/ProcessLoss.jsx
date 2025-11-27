@@ -1,14 +1,24 @@
 import React from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import { Box, Chip, Typography, useTheme } from "@mui/material";
+import { Box, Chip, Typography, useTheme, IconButton } from "@mui/material";
 import { parseISO, format } from "date-fns";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
-const ProcessLossChart = ({ dayAnalysis }) => {
+const ProcessLossChart = ({ 
+  dayAnalysis,
+  monthLabel,
+  onPrev,
+  onNext,
+  disablePrev,
+  disableNext
+}) => {
   const theme = useTheme();
 
   if (!dayAnalysis || dayAnalysis.length === 0) return null;
+
   const firstDate = parseISO(dayAnalysis[0].date);
   const chartTitle = `Process Loss (%) – ${format(firstDate, "MMMM yyyy")}`;
+
   const FormattedDate = dayAnalysis.map((val, i) => ({
     day: i + 1,
     loss: val?.factoryLoss,
@@ -16,9 +26,20 @@ const ProcessLossChart = ({ dayAnalysis }) => {
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        {chartTitle}
-      </Typography>
+      <Box display="flex" alignItems="center" gap={2} mb={1}>
+        <IconButton onClick={onPrev} disabled={disablePrev} size="small" sx={{bgcolor:'#7171711a'}}>
+          <ChevronLeft />
+        </IconButton>
+
+        <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
+          Process Loss (%) –{" "}
+          <span style={{ marginLeft: 6, minWidth: "165px", display: "inline-block" }}>{monthLabel}</span>
+        </Typography>
+
+        <IconButton onClick={onNext} disabled={disableNext} size="small" sx={{bgcolor:'#7171711a'}}>
+          <ChevronRight />
+        </IconButton>
+      </Box>
 
       <ResponsiveContainer width="100%" height={320} style={{ padding: "1px" }}>
         <AreaChart data={FormattedDate}>

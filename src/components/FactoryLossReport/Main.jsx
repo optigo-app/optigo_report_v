@@ -11,7 +11,7 @@ import PureLossAnalyticsCard from "./PureLossAnalyticsCard";
 import FactoryLossAnalytics from "../../analytics/FactoryLossAnalytics";
 import { useFactoryLoss } from "./../../context/FactoryLossReport";
 import { filterFactoryLossData } from "../../libs/FactoryLossFilter";
-import { startOfMonth, endOfMonth } from "date-fns";
+import { eachMonthOfInterval, startOfMonth, endOfMonth, differenceInMonths, format } from "date-fns";
 import Loader from "../shared/Loader";
 
 const Header = styled(Box)(({ theme }) => ({
@@ -30,12 +30,31 @@ const Card = styled(Paper)(({ theme }) => ({
 
 export default function FactoryLossReport() {
   const { rawData } = useFactoryLoss();
-  console.log("🚀 ~ FactoryLossReport ~ rawData:", rawData)
+  // console.log("🚀 ~ FactoryLossReport ~ rawData:", rawData)
   const defaultStart = startOfMonth(new Date());
   const defaultEnd = endOfMonth(new Date());
   const defaultSelectedDate = { startDate: defaultStart, endDate: defaultEnd };
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [dateRange, setDateRange] = useState(defaultSelectedDate);
+
+  const isMultiMonth = differenceInMonths(
+    dateRange.endDate,
+    dateRange.startDate
+  ) >= 1;
+
+  const monthsList = useMemo(() => {
+    return eachMonthOfInterval({
+      start: dateRange.startDate,
+      end: dateRange.endDate
+    }).map((m) => ({
+      start: startOfMonth(m),
+      end: endOfMonth(m)
+    }));
+  }, [dateRange]);
+
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
+  const activeRange = monthsList[currentMonthIndex];
+  const monthLabel = format(activeRange.start, "MMMM yyyy");
 
   const filtered = useMemo(() => {
     return filterFactoryLossData(rawData, {
@@ -46,7 +65,10 @@ export default function FactoryLossReport() {
 
   const analytics = new FactoryLossAnalytics(filtered);
   const categoryAnalysis = analytics.getCategoryGrouping();
-  const dayAnalysis = analytics.getDayGrouping(dateRange);
+  const dayAnalysis = analytics.getDayGrouping({
+    startDate: activeRange.start,
+    endDate: activeRange.end,
+  });  
   const rangeAnalysis = analytics.getRangeGrouping();
   const locationAnalysis = analytics.getLocationGrouping();
   const PureGrossLoss = analytics.getOverallFactoryLoss();
@@ -60,7 +82,7 @@ export default function FactoryLossReport() {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: "#f9f9fb",height: "100%",
+    <Box sx={{ p: { xs: 2, md: 2 }, bgcolor: "#f9f9fb",height: "100%",
     overflowY: "auto", }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
@@ -74,7 +96,7 @@ export default function FactoryLossReport() {
         </Box>
       </Header>
       {/* 3-Column Grid */}
-      <Grid container spacing={3} sx={{ mt: 0 }}>
+      <Grid container spacing={2} sx={{ mt: 0 }}>
         {/* First Row */}
         <Grid item md={4} xs={12} key={1}>
           <Card>
@@ -96,8 +118,15 @@ export default function FactoryLossReport() {
 
         {/* Full Width Grid */}
         <Grid item md={12} xs={12}>
-          <Card sx={{ height: 390 }}>
-            <ProcessLossChart dayAnalysis={dayAnalysis} />
+          <Card sx={{ height: 384 }}>
+            <ProcessLossChart 
+              dayAnalysis={dayAnalysis}
+              monthLabel={monthLabel}
+              onPrev={() => setCurrentMonthIndex(i => i - 1)}
+              onNext={() => setCurrentMonthIndex(i => i + 1)}
+              disablePrev={!isMultiMonth || currentMonthIndex === 0}
+              disableNext={!isMultiMonth || currentMonthIndex === monthsList.length - 1} 
+            />
           </Card>
         </Grid>
       </Grid>
