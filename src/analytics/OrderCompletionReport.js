@@ -16,9 +16,14 @@ class OrderCompletionReport {
     
     this.data = dateFilteredData.filter((item) => {
       const jobStatus = String(item["jobstatus"] || "").trim();
-      if (this.tab === 1) return jobStatus === "Dispatched";
-      if (this.tab === 0) return jobStatus !== "Dispatched";
-      return true;
+      const deliveryDate = String(item["Delivery Date"] || "").trim();
+      if (this.tab === 1) {
+        if (jobStatus === "Dispatched") return true;
+      }
+      if (this.tab === 0) {
+        if (deliveryDate === "") return true;
+      }
+      return false;
     });
 
     console.log(`Final filtered data: ${this.data.length} items`);
