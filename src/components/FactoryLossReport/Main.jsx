@@ -82,7 +82,7 @@ export default function FactoryLossReport() {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: "#f9f9fb",height: "100%", overflowY: "auto", }}>
+    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 17 }, bgcolor: "#f9f9fb",height: "100%", overflowY: "auto", }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
           Factory Floor Loss Analysis

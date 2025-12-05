@@ -20,6 +20,49 @@ const lossData = [
 const LossTableWithPopover = ({ rangeAnalysis }) => {
   const [anchorPosition, setAnchorPosition] = useState(null);
   const [popoverItems, setPopoverItems] = useState([]);
+  // console.log("rangeAnalysis", rangeAnalysis);
+  
+
+  // const formattedData = rangeAnalysis?.map((val) => {
+  //   const mergedDetails = [];
+
+  //   val?.items?.forEach(item => {
+  //       const existingGroupIndex = mergedDetails.findIndex(group =>
+  //           group.Designcode === item.Designcode && group.CustomerCode === item.CustomerCode
+  //       );
+
+  //       if (existingGroupIndex !== -1) {
+  //           mergedDetails[existingGroupIndex].PurePrcLossSumSum += item.PurePrcLoss;
+  //           mergedDetails[existingGroupIndex].count += 1;
+  //           mergedDetails[existingGroupIndex].items.push(item); 
+  //       } else {
+  //           mergedDetails.push({
+  //               Designcode: item.Designcode,
+  //               CustomerCode: item.CustomerCode,
+  //               PurePrcLossSum: item.PurePrcLoss,
+  //               count: 1,
+  //               items: [item]
+  //           });
+  //       }
+  //   });
+
+  //   const finalItems = mergedDetails.map(group => {
+  //       const avgPurePrcLoss = group.PurePrcLossSum / group.count;
+
+  //       return {
+  //           ...group.items[0],
+  //           PurePrcLoss: avgPurePrcLoss, 
+  //           count: group.count,  
+  //           // items: group.items  
+  //       };
+  //   });
+
+  //   return {
+  //       range: val?.range,
+  //       count: finalItems.length, 
+  //       details: finalItems
+  //   };
+  // });
 
   const formattedData = rangeAnalysis?.map((val) => {
     return {
@@ -28,6 +71,8 @@ const LossTableWithPopover = ({ rangeAnalysis }) => {
       details: val?.items,
     };
   });
+  // console.log("formattedData", formattedData);
+  
 
   const handleSliceClick = (event, items) => {
     setPopoverItems(items);
@@ -99,7 +144,7 @@ const LossPopover = ({ anchorPosition, onClose, items = [] }) => {
         sx: {
           borderRadius: 2,
           boxShadow: 4,
-          width: 600,
+          width: 475,
           p: 2,
           bgcolor: (theme) => theme.palette.background.paper,
         },
@@ -123,6 +168,7 @@ const LossPopover = ({ anchorPosition, onClose, items = [] }) => {
 };
 
 function PremiumTable({ selectedItems }) {
+  // console.log("selectedItems", selectedItems);
   return (
     <Paper
       elevation={0}
@@ -137,14 +183,9 @@ function PremiumTable({ selectedItems }) {
         <TableHead>
           <TableRow sx={{ backgroundColor: "#f9fafb" }}>
             <TableCell sx={headStyle}>#</TableCell>
-            <TableCell sx={headStyle}>Item ID</TableCell>
-            <TableCell sx={headStyle}>Item Name</TableCell>
-            <TableCell sx={headStyle} align="right">
-              Quantity
-            </TableCell>
-            <TableCell sx={headStyle} align="right">
-              Delay %
-            </TableCell>
+            <TableCell sx={headStyle}>Design</TableCell>
+            <TableCell sx={{ ...headStyle, textAlign: "end"}}>Customer Name</TableCell>
+            <TableCell sx={headStyle} align="right">Loss %</TableCell>
           </TableRow>
         </TableHead>
 
@@ -158,19 +199,18 @@ function PremiumTable({ selectedItems }) {
               }}
             >
               <TableCell>{idx + 1}</TableCell>
-              <TableCell>{`ITEM-${1000 + idx}`}</TableCell>
-              <TableCell>{`Product ${String.fromCharCode(65 + idx)}`}</TableCell>
+              <TableCell>{item?.Designcode}</TableCell>
               <TableCell align="right">{item?.CustomerCode}</TableCell>
               <TableCell align="right">
                 <Chip
-                  label={`${(Math.random() * 100).toFixed(2)}%`}
+                  label={`${(item?.PurePrcLoss).toFixed(2)}%`}
                   size="small"
                   sx={{
                     fontWeight: 500,
                     fontSize: "0.75rem",
                     height: 22,
                     borderRadius: 4,
-                    ...getChipColorStyles(item?.GrossWt),
+                    ...getChipColorStyles(item?.PurePrcLoss),
                   }}
                 />
               </TableCell>
