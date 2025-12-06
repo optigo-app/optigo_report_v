@@ -218,7 +218,7 @@ class FactoryLossAnalytics {
   const groups = {};
 
   this.data.forEach((item) => {
-    const rawDate = new Date(item.orderdate);
+    const rawDate = new Date(item.ExportBatchDate);
     if (!isValid(rawDate) || !isSameMonth(rawDate, start)) return;
 
     const dateKey = format(rawDate, "yyyy-MM-dd");
@@ -239,7 +239,7 @@ class FactoryLossAnalytics {
     groups[dateKey].totalGrossLoss += grossLoss;
     groups[dateKey].totalNetLoss += netLoss;
   });
-
+  
   return allDates.map((date) => {
     const group = groups[date] || {
       date,
@@ -248,10 +248,12 @@ class FactoryLossAnalytics {
       totalNetLoss: 0,
       factoryLoss: 0,
     };
-
+    
     group.factoryLoss =
-      group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
-
+    group.totalNetLoss > 0
+      ? parseFloat(((group.totalGrossLoss / group.totalNetLoss) * 100).toFixed(3)) // Convert to number
+      : 0; 
+    
     return group;
   });
 }

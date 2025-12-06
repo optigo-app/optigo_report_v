@@ -85,7 +85,7 @@ const ProcessLossChart = ({
           <YAxis hide />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip
-            formatter={(val) => `${Number(val)?.toFixed(0)}%`}
+            formatter={(val) => `${Number(val)?.toFixed(3)}%`}
             contentStyle={{
               backgroundColor: "#fff",
               border: "1px solid #E5E7EB",
