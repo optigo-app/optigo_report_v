@@ -15,7 +15,7 @@ import { Datetheme } from "../../libs/data";
 
 const MAX_DISPLAY_CHIPS = 2;
 
-export default function MetTypeSelect({ selected = [], onChange, MetalTypeList = [] }) {
+export default function MetTypeSelect({ selected = [], onChange, MetalTypeList = [], disabled }) {
   const renderSelected = (selectedItems) => {
     if (selectedItems.length === 0) return "";
 
@@ -44,11 +44,12 @@ export default function MetTypeSelect({ selected = [], onChange, MetalTypeList =
   return (
     <ThemeProvider theme={Datetheme}>
       <Box sx={{ bgcolor: "#fff" }}>
-        <FormControl sx={{ minWidth: 250 }} size="small">
+        <FormControl sx={{ minWidth: 300 }} size="small" disabled={disabled}>
           <InputLabel id="mettype-label">Metal Type</InputLabel>
           <Select
             labelId="mettype-label"
             multiple
+            disabled={disabled}
             value={selected}
             onChange={onChange}
             input={<OutlinedInput label="Metal Type" />}

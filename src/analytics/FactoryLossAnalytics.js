@@ -90,18 +90,30 @@ class FactoryLossAnalytics {
 
     return Object.values(groups);
   }
+
+  /* Design Wise Percentage */
   getRangeGrouping() {
-    this.data.forEach((item) => {
-      const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
-      item.PurePrcLoss = Math.floor(parseFloat(purePrcLossStr)) || 0;
-      item.GrossPrcLoss = Math.floor(parseFloat(grossPrcLossStr)) || 0;
-    });
+    // this.data.forEach((item) => {
+    //   const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
+    
+    //   const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
+    //   const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
+
+    //   item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
+    //   item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
+    // });
+    // console.log("Before Grouping this.data", this.data);
 
     const groupedData = {};
 
     this.data.forEach((item) => {
-      const [purePrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
-      item.PurePrcLoss = Math.floor(parseFloat(purePrcLossStr)) || 0;
+      const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
+
+      const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
+      const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
+
+      item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
+      item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
 
       const designCustomerKey = `${item.Designcode}-${item.CustomerCode}`;
       
@@ -118,10 +130,10 @@ class FactoryLossAnalytics {
 
     Object.values(groupedData).forEach(group => {
       const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
-      if (avgPurePrcLoss === 0) {
-        return;  
-      }
-      const mergedItem = { ...group.items[0], PurePrcLoss: avgPurePrcLoss };
+      // if (avgPurePrcLoss === 0) {
+      //   return;  
+      // }
+      const mergedItem = { ...group.items[0], Designcode: `${group.items[0].Designcode} (${group.count})`, PurePrcLoss: avgPurePrcLoss };
       mergedData.push(mergedItem);
     });
 
@@ -203,10 +215,11 @@ class FactoryLossAnalytics {
   //   });
   // }
 
+  /* Process Loss Chart */
  getDayGrouping(dateRange = {}) {
   const start = isValid(dateRange.startDate) ? startOfDay(dateRange.startDate) : startOfDay(new Date());
   const end = isValid(dateRange.endDate) ? endOfDay(dateRange.endDate) : start;
-  console.log("dateRange", dateRange);
+  // console.log("dateRange", dateRange);
   
   const monthStart = startOfMonth(start);
   const monthEnd = endOfMonth(end);
