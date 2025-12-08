@@ -62,7 +62,7 @@ const CategoryBarChart = ({ categoryAnalysis }) => {
             </defs>
 
             <XAxis type="number" hide domain={[0, 150]} />
-            <YAxis dataKey="category" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 14, fill: "#6B7280", fontWeight: 500 }} width={150} />
+            <YAxis width={155} dataKey="category" type="category"  axisLine={false} tickLine={false} tick={{ fontSize: 14, fill: "#6B7280", fontWeight: 500 }} />
             <Tooltip
               cursor={{ fill: "rgba(59, 130, 246, 0.05)" }}
               content={({ active, payload, label }) => {
@@ -85,7 +85,7 @@ const CategoryBarChart = ({ categoryAnalysis }) => {
               radius={[14, 14, 14, 14]}
               fill={(data) => data.fill}
             >
-              <LabelList content={<CustomBarLabel />} />
+              <LabelList position="outsideLeft" content={<CustomBarLabel />} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

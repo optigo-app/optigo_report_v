@@ -98,14 +98,14 @@ const LossTableWithPopover = ({ rangeAnalysis }) => {
         <PieChart>
           <defs>
             {formattedData?.map((entry, index) => (
-              <radialGradient id={`gradient-${index}`} cx="50%" cy="50%" r="80%" key={index}>
+              <radialGradient id={`gradient-${index}`} cx="48%" cy="52%" r="90%" key={index}>
                 <stop offset="0%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.4} />
                 <stop offset="100%" stopColor={COLORS[index % COLORS.length]} stopOpacity={0.9} />
               </radialGradient>
             ))}
           </defs>
 
-          <Pie data={formattedData} dataKey="count" nameKey="range" cx="50%" cy="50%" outerRadius={140} innerRadius={60} cornerRadius={6} paddingAngle={3} labelLine={false} label={({ name, value }) => `${name} (${value})`} onClick={(data, index, e) => handleSliceClick(e, data.payload.details)}>
+          <Pie data={formattedData} dataKey="count" nameKey="range" cx="52%" cy="52%" outerRadius={120} innerRadius={60} cornerRadius={6} paddingAngle={4} labelLine={false} label={({ name, value }) => `${name} (${value})`} onClick={(data, index, e) => handleSliceClick(e, data.payload.details)}>
             {formattedData?.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={`url(#gradient-${index})`} stroke="#fff" strokeWidth={2} cursor="pointer" />
             ))}
