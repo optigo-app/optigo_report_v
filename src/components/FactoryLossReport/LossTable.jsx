@@ -94,7 +94,7 @@ const LossTableWithPopover = ({ rangeAnalysis }) => {
       <Typography variant="h6" gutterBottom>
         Design-wise Percentage
       </Typography>
-      <ResponsiveContainer width="100%" height={340}>
+      <ResponsiveContainer width="100%" height={260}>
         <PieChart>
           <defs>
             {formattedData?.map((entry, index) => (

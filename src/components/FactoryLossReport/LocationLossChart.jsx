@@ -53,7 +53,7 @@ const Dashboard = ({ locationAnalysis }) => {
         Cell Wise Loss
       </Typography>
 
-      <ResponsiveContainer width="100%" height={340}>
+      <ResponsiveContainer width="100%" height={260}>
         <ComposedChart data={chartData}>
           <defs>
             <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">

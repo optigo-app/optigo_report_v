@@ -93,7 +93,7 @@ export default function FactoryLossReport() {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 10 }, bgcolor: "#f9f9fb", height: "100%", overflowY: "auto" }}>
+    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 2 }, bgcolor: "#f9f9fb", height: "90vh", overflowY: "auto" }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
           Factory Floor Loss Analysis
@@ -135,7 +135,7 @@ export default function FactoryLossReport() {
 
           {/* Full Width Grid */}
           <Grid item md={12} xs={12}>
-            <Card sx={{ height: 384 }}>
+            <Card sx={{ height: 370 }}>
               <ProcessLossChart
                 dayAnalysis={dayAnalysis}
                 monthLabel={monthLabel}

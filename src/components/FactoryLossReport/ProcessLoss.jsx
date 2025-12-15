@@ -41,7 +41,7 @@ const ProcessLossChart = ({
         </IconButton>
       </Box>
 
-      <ResponsiveContainer width="100%" height={320} style={{ padding: "1px" }}>
+      <ResponsiveContainer width="100%" height={300} style={{ padding: "1px" }}>
         <AreaChart data={FormattedDate}>
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
