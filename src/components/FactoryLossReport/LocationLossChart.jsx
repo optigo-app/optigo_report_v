@@ -2,6 +2,7 @@ import { XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Area, Bar, C
 import { Typography } from "@mui/material";
 
 const Dashboard = ({ locationAnalysis }) => {
+  
   const chartData = Array?.isArray(locationAnalysis)
     ? locationAnalysis.map((item) => ({
       name: item.location || "Unknown",

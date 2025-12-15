@@ -46,8 +46,8 @@ const CategoryBarChart = ({ categoryAnalysis }) => {
       </Typography>
 
       <Box sx={{  height: 260, overflowY: "auto" }}>
-        <ResponsiveContainer width="100%" height={240}>
-          <BarChart data={formattedData} layout="vertical" margin={{ top: 10, right: 30, left: 0, bottom: 10 }}>
+        <ResponsiveContainer width="100%" height={formattedData.length * 40}>
+          <BarChart data={formattedData} layout="vertical" margin={{ top: 10, right: 65, left: 0, bottom: 10 }}>
           <defs>
               <linearGradient id={blueGradientId} x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.9} />

@@ -42,7 +42,9 @@ const ProcessLossChart = ({
       </Box>
 
       <ResponsiveContainer width="100%" height={300} style={{ padding: "1px" }}>
-        <AreaChart data={FormattedDate}>
+        <AreaChart data={FormattedDate} 
+          // margin={{ top: 1, right: 0, left: 0, bottom: 0 }}
+        >
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#dc2626" stopOpacity={0.4} />   {/* Deep Red */}
@@ -104,22 +106,28 @@ const ProcessLossChart = ({
             fill="url(#areaGradient)"
             dot={{ r: 3, stroke: "#DC2626", strokeWidth: 1.5, fill: "#FFF" }}
             activeDot={{ r: 5, fill: "#B91C1C" }}
-            label={({ x, y, value }) => (
-              <text
-                x={x}
-                y={y - 10}
-                fill="#1F2937"
-                fontSize={12}
-                fontWeight={500}
-                textAnchor="middle"
-                style={{
-                  pointerEvents: "none",
-                  userSelect: "none",
-                }}
-              >
-                {`${Number(value).toFixed(0)}%`}
-              </text>
-            )}
+            label={({ x, y, value }) => {
+              const TOP_THRESHOLD = 30; // px from top of chart
+              const isTooCloseToTop = y < TOP_THRESHOLD;
+              const labelY = isTooCloseToTop ? y + 38 : y - 10;
+              
+              return (
+                <text
+                  x={x}
+                  y={labelY}
+                  fill="#1F2937"
+                  fontSize={12}
+                  fontWeight={500}
+                  textAnchor="middle"
+                  style={{
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  }}
+                >
+                  {`${Number(value).toFixed(0)}%`}
+                </text>
+              )
+            }}
           />
         </AreaChart>
       </ResponsiveContainer>

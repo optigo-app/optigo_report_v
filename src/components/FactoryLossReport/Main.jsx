@@ -93,7 +93,7 @@ export default function FactoryLossReport() {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 2 }, bgcolor: "#f9f9fb", height: "90vh", overflowY: "auto" }}>
+    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 1.5 }, bgcolor: "#f9f9fb", height: "92.5vh", overflowY: "auto" }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
           Factory Floor Loss Analysis
@@ -148,7 +148,7 @@ export default function FactoryLossReport() {
           </Grid>
         </Grid>
       ) : (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="80vh" gap={1}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="92.5vh" gap={1}>
           <Typography variant="h6" color="error">
             Invalid date range selected.
           </Typography>

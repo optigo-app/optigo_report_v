@@ -162,59 +162,6 @@ class FactoryLossAnalytics {
     return Object.values(groups).filter((g) => g.items.length > 0);
   }
 
-  // getDayGrouping() {
-  //   const now = new Date();
-  //   const currentMonth = now.getMonth();
-  //   const currentYear = now.getFullYear();
-  //   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  //   const allDates = Array.from({ length: daysInMonth }, (_, i) => {
-  //     const date = new Date(currentYear, currentMonth, i + 1);
-  //     return date.toISOString().split("T")[0];
-  //   });
-
-  //   const groups = {};
-
-  //   this.data.forEach((item) => {
-  //     const rawDate = new Date(item.orderdate);
-  //     if (isNaN(rawDate)) return;
-
-  //     if (rawDate.getFullYear() !== currentYear || rawDate.getMonth() !== currentMonth) return;
-
-  //     const dateKey = rawDate.toISOString().split("T")[0];
-  //     const grossLoss = parseFloat(item["Gross Loss"]) || 0;
-  //     const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
-
-  //     if (!groups[dateKey]) {
-  //       groups[dateKey] = {
-  //         date: dateKey,
-  //         items: [],
-  //         totalGrossLoss: 0,
-  //         totalNetLoss: 0,
-  //         factoryLoss: 0,
-  //       };
-  //     }
-
-  //     groups[dateKey].items.push(item);
-  //     groups[dateKey].totalGrossLoss += grossLoss;
-  //     groups[dateKey].totalNetLoss += netLoss;
-  //   });
-
-  //   return allDates.map((date) => {
-  //     const group = groups[date] || {
-  //       date,
-  //       items: [],
-  //       totalGrossLoss: 0,
-  //       totalNetLoss: 0,
-  //       factoryLoss: 0,
-  //     };
-
-  //     group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
-
-  //     return group;
-  //   });
-  // }
-
   /* Process Loss Chart */
  getDayGrouping(dateRange = {}) {
   const start = isValid(dateRange.startDate) ? startOfDay(dateRange.startDate) : startOfDay(new Date());
