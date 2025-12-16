@@ -26,7 +26,7 @@ const ProcessLossChart = ({
 
   return (
     <>
-      <Box display="flex" alignItems="center" gap={2} mb={1}>
+      <Box display="flex" alignItems="center" gap={2} mb={0}>
         <IconButton onClick={onPrev} disabled={disablePrev} size="small" sx={{bgcolor:'#7171711a'}}>
           <ChevronLeft />
         </IconButton>
@@ -41,9 +41,9 @@ const ProcessLossChart = ({
         </IconButton>
       </Box>
 
-      <ResponsiveContainer width="100%" height={300} style={{ padding: "1px" }}>
+      <ResponsiveContainer width="100%" height="95%" style={{ padding: "1px" }}>
         <AreaChart data={FormattedDate} 
-          // margin={{ top: 1, right: 0, left: 0, bottom: 0 }}
+          margin={{ top: 5, right: 22, bottom: 5, left: 22 }}
         >
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">

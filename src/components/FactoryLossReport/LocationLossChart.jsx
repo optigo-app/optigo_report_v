@@ -2,7 +2,7 @@ import { XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Area, Bar, C
 import { Typography } from "@mui/material";
 
 const Dashboard = ({ locationAnalysis }) => {
-  
+
   const chartData = Array?.isArray(locationAnalysis)
     ? locationAnalysis.map((item) => ({
       name: item.location || "Unknown",
@@ -54,12 +54,18 @@ const Dashboard = ({ locationAnalysis }) => {
         Cell Wise Loss
       </Typography>
 
-      <ResponsiveContainer width="100%" height={260}>
+      <ResponsiveContainer width="100%" height="95%" >
         <ComposedChart data={chartData}>
-          <defs>
+          {/* <defs>
             <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={gradientStart} stopOpacity={10} />
               <stop offset="100%" stopColor={gradientStart} stopOpacity={0} />
+            </linearGradient>
+          </defs> */}
+          <defs>
+            <linearGradient id="gradientCustomer" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#93c5fd" stopOpacity={0.2} />
             </linearGradient>
           </defs>
 
@@ -85,7 +91,10 @@ const Dashboard = ({ locationAnalysis }) => {
             formatter={(value) => `${value.toLocaleString()}%`}
           />
 
-          <Bar dataKey="value" barSize={28} fill={barFill} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="value" barSize={28} 
+            fill="url(#gradientCustomer)" 
+            // fill={areaStroke}
+            radius={[4, 4, 0, 0]} />
 
           {/* <Area type="monotone" dataKey="value" stroke={areaStroke} fill="url(#areaFill)" strokeWidth={2} /> */}
         </ComposedChart>

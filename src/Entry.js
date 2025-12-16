@@ -54,6 +54,28 @@ export default function Entry() {
   // %7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18300%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22NA%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22MTg5Mjk%3d%22%2c%22LUId%22%3a%22dnZrQG56ZW4uY29t%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%2c%22YearCode%22%3a%22e3tuemVufX17ezIwfX17e29yYWlsMjV9fXt7b3JhaWwyNX19%22%2c%22cuVer%22%3a%22UjUwQjM%3d%22%2c%22rptapiurl%22%3a%22aHR0cDovL25ld25leHRqcy53ZWIvYXBpL3JlcG9ydA%3d%3d%22%7d
 
   // useEffect(()=>{
+  //   // Sales Analysis
+  //   if(process.env.NODE_ENV === 'development'){
+  //   setUrlAndCookie(
+  //     "UkRTRF8yMDI1MDkwOTA0MzEzOV9hNWFkODYwOGFjNDU0MmRlOWU3Nzc1YTJiYjBmNmMwMg==",
+  //     "RDSD_20250909043139_a5ad8608ac4542de9e7775a2bb0f6c02",
+  //     `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18314%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22Mw%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%7d`
+  //   )
+  // }
+  // },[])
+
+  // useEffect(()=>{
+  //   // Quote Analysis
+  //   if(process.env.NODE_ENV === 'development'){
+  //   setUrlAndCookie(
+  //     "UkRTRF8yMDI1MDgxOTEyMzE0N18yNjdkNDRhZTJmNjk0NzRjYWVkMTVjYWZjZjllODkwYw==",
+  //     "RDSD_20250819123147_267d44ae2f69474caed15cafcf9e890c",
+  //     `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18315%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22NQ%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%7d`
+  //   )
+  // }
+  // },[])
+
+  // useEffect(()=>{
   //   // Order Completion
   //   if(process.env.NODE_ENV === 'development'){
   //   setUrlAndCookie(
@@ -64,16 +86,16 @@ export default function Entry() {
   // }
   // },[])
 
-  useEffect(()=>{
-    // fACTOREY FLOOR
-    if(process.env.NODE_ENV === 'development'){
-    setUrlAndCookie(
-      "UkRTRF8yMDI1MTEyNjA3MTEzN19lMDhiYzM0ZDFjYWQ0N2JjYTM0OWUzMmZmMTA1MGY1MQ==",
-      "RDSD_20251126071137_e08bc34d1cad47bca349e32ff1050f51",
-      `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18301%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22Nw%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%2c%22YearCode%22%3a%22e3tuemVufX17ezIwfX17e29yYWlsMjV9fXt7b3JhaWwyNX19%22%2c%22cuVer%22%3a%22UjUwQjM%3d%22%2c%22rptapiurl%22%3a%22aHR0cDovL25ld25leHRqcy53ZWIvYXBpL3JlcG9ydA%3d%3d%22%7d`
-    )
-  }
-  },[])
+  // useEffect(()=>{
+  //   // Factory Floor
+  //   if(process.env.NODE_ENV === 'development'){
+  //   setUrlAndCookie(
+  //     "UkRTRF8yMDI1MTEyNjA3MTEzN19lMDhiYzM0ZDFjYWQ0N2JjYTM0OWUzMmZmMTA1MGY1MQ==",
+  //     "RDSD_20251126071137_e08bc34d1cad47bca349e32ff1050f51",
+  //     `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18301%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22Nw%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%2c%22YearCode%22%3a%22e3tuemVufX17ezIwfX17e29yYWlsMjV9fXt7b3JhaWwyNX19%22%2c%22cuVer%22%3a%22UjUwQjM%3d%22%2c%22rptapiurl%22%3a%22aHR0cDovL25ld25leHRqcy53ZWIvYXBpL3JlcG9ydA%3d%3d%22%7d`
+  //   )
+  // }
+  // },[])
 
 
 

@@ -93,7 +93,7 @@ export default function FactoryLossReport() {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, pb: { xs: 2, lg: 1.5 }, bgcolor: "#f9f9fb", height: "92.5vh", overflowY: "auto" }}>
+    <Box sx={{ p: { xs: 2, md: 2 }, pb: { xs: 2, lg: 0 }, bgcolor: "#f9f9fb", height: "100%", overflowY: "auto" }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
           Factory Floor Loss Analysis
@@ -113,29 +113,33 @@ export default function FactoryLossReport() {
 
       {/* 3-Column Grid */}
       {isDateRangeValid && monthsList.length > 0 ? (
-        <Grid container spacing={2} sx={{ mt: 0 }}>
+        <Grid container spacing={2} sx={{ mt: 0, height: "95%", pt: 0 }}>
           {/* First Row */}
-          <Grid item md={4} xs={12} key={1}>
-            <Card>
-              <CategoryBarChart categoryAnalysis={categoryAnalysis} />
-            </Card>
-          </Grid>
-          {/* Second Row */}
-          <Grid item md={4} xs={12} key={2}>
-            <Card>
-              <LossTable rangeAnalysis={rangeAnalysis} />
-            </Card>
-          </Grid>
-          {/* Third Row */}
-          <Grid item md={4} xs={12} key={3}>
-            <Card>
-              <LocationLossChart locationAnalysis={locationAnalysis} />
-            </Card>
+          <Grid item xs={12} sx={{ height: "50%", pt: 0 }}>
+            <Grid container columnSpacing={2} sx={{ height: "100%" }}>
+              <Grid item md={4} xs={12} key={1} sx={{ height: "100%" }}>
+                <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                  <CategoryBarChart categoryAnalysis={categoryAnalysis} />
+                </Card>
+              </Grid>
+              {/* Second Row */}
+              <Grid item md={4} xs={12} key={2} sx={{ height: "100%" }}>
+                <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                  <LossTable rangeAnalysis={rangeAnalysis} />
+                </Card>
+              </Grid>
+              {/* Third Row */}
+              <Grid item md={4} xs={12} key={3} sx={{ height: "100%" }}>
+                <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                  <LocationLossChart locationAnalysis={locationAnalysis} />
+                </Card>
+              </Grid>
+            </Grid>
           </Grid>
 
           {/* Full Width Grid */}
-          <Grid item md={12} xs={12}>
-            <Card sx={{ height: 370 }}>
+          <Grid item xs={12} sx={{ height: "50%", pt: 0 }}>
+            <Card sx={{ height: "97%" }}>
               <ProcessLossChart
                 dayAnalysis={dayAnalysis}
                 monthLabel={monthLabel}
@@ -148,7 +152,14 @@ export default function FactoryLossReport() {
           </Grid>
         </Grid>
       ) : (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="92.5vh" gap={1}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+          gap={1}
+        >
           <Typography variant="h6" color="error">
             Invalid date range selected.
           </Typography>
