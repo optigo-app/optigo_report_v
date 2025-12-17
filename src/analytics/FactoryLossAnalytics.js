@@ -3,17 +3,22 @@ import { isValid, startOfDay, endOfDay, startOfMonth, endOfMonth, eachDayOfInter
 class FactoryLossAnalytics {
   constructor(data) {
     this.data = Array.isArray(data) ? data : [];
+    // console.log("Constructor: Initial data", this.data.length); // Log initial data length
   }
+
   setData(data) {
     this.data = Array.isArray(data) ? data : [];
+    // console.log("setData: New data set", this.data.length); // Log new data set length
     return this;
   }
+
   extractPurePrcLoss(value) {
     if (!value || typeof value !== "string") return 0;
     return parseFloat(value.split("|")[1].trim()) || 0;
   }
+
   getPurePrcLossRange(value) {
-    // const pureValue = this.extractPurePrcLoss(value);
+    // console.log('getPurePrcLossRange: Checking PurePrcLoss value', value); // Log value
     if (value < 10) return "0 - 10%";
     if (value < 15) return "10 - 15%";
     if (value < 20) return "15 - 20%";
@@ -23,6 +28,7 @@ class FactoryLossAnalytics {
     if (value < 50) return "40 - 50%";
     return "Above 50%";
   }
+
   formatDate(dateString) {
     if (!dateString) return "Invalid Date";
     try {
@@ -32,13 +38,17 @@ class FactoryLossAnalytics {
       return "Invalid Date";
     }
   }
+
   getCategoryGrouping() {
+    // console.log('getCategoryGrouping: Start grouping categories');
     const groups = {};
 
     this.data.forEach((item) => {
       const category = item.category || "Unknown";
       const grossLoss = parseFloat(item["Gross Loss"]) || 0;
       const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
+
+      // console.log(`getCategoryGrouping: Processing item with category ${category}`); // Log item category
 
       if (!groups[category]) {
         groups[category] = {
@@ -59,15 +69,20 @@ class FactoryLossAnalytics {
       group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
     });
 
+    // console.log('getCategoryGrouping: Grouping completed', groups); // Log grouped data
     return Object.values(groups);
   }
+
   getLocationGrouping() {
+    // console.log('getLocationGrouping: Start grouping by location');
     const groups = {};
 
     this.data.forEach((item) => {
       const location = item.Locationname || "Unknown";
       const grossLoss = parseFloat(item["Gross Loss"]) || 0;
       const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
+
+      // console.log(`getLocationGrouping: Processing item with location ${location}`); // Log item location
 
       if (!groups[location]) {
         groups[location] = {
@@ -88,137 +103,147 @@ class FactoryLossAnalytics {
       group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
     });
 
+    // console.log('getLocationGrouping: Grouping completed', groups); // Log grouped data
     return Object.values(groups);
   }
 
-  /* Design Wise Percentage */
   getRangeGrouping() {
-    // this.data.forEach((item) => {
-    //   const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
+    console.log('getRangeGrouping: Start grouping by PurePrcLoss range');
     
-    //   const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
-    //   const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
-
-    //   item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
-    //   item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
-    // });
-    // console.log("Before Grouping this.data", this.data);
-
-    const groupedData = {};
-
-    this.data.forEach((item) => {
-      const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
-
-      const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
-      const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
-
-      item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
-      item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
-
-      const designCustomerKey = `${item.Designcode}-${item.CustomerCode}`;
-      
-      if (!groupedData[designCustomerKey]) {
-        groupedData[designCustomerKey] = { count: 0, sumPurePrcLoss: 0, items: [] };
-      }
-
-      groupedData[designCustomerKey].count++;
-      groupedData[designCustomerKey].sumPurePrcLoss += item.PurePrcLoss;
-      groupedData[designCustomerKey].items.push(item);
-    });
-
-    const mergedData = [];
-
-    Object.values(groupedData).forEach(group => {
-      const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
-      // if (avgPurePrcLoss === 0) {
-      //   return;  
-      // }
-      const mergedItem = { ...group.items[0], Designcode: `${group.items[0].Designcode} (${group.count})`, PurePrcLoss: avgPurePrcLoss };
-      mergedData.push(mergedItem);
-    });
-
-    this.data = mergedData;
-    // console.log("After grouping and merging - this.data:", this.data);
-
+    // Step 1: Declare an empty array to hold the updated data after processing
+    const updatedData = [];
+    
+    // Define the ranges you want to use for grouping
     const ranges = ["0 - 10%", "10 - 15%", "15 - 20%", "20 - 25%", "25 - 30%", "30 - 40%", "40 - 50%", "Above 50%"];
+    
+    // Step 2: Group data by Designcode and CustomerCode and calculate the merged PurePrcLoss
+    const groupedData = {};
+    
+    this.data.forEach((item) => {
+        const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
+        
+        // Clean the strings and extract PurePrcLoss and GrossPrcLoss values
+        const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
+        const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
+        
+        item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
+        item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
 
+        // Group by Designcode and CustomerCode
+        const designCustomerKey = `${item.Designcode}-${item.CustomerCode}`;
+        
+        if (!groupedData[designCustomerKey]) {
+            groupedData[designCustomerKey] = { count: 0, sumPurePrcLoss: 0, items: [] };
+        }
+
+        groupedData[designCustomerKey].count++;
+        groupedData[designCustomerKey].sumPurePrcLoss += item.PurePrcLoss;
+        groupedData[designCustomerKey].items.push(item);
+    });
+
+    // Step 3: Process grouped data and merge the PurePrcLoss for each group
+    Object.values(groupedData).forEach(group => {
+        const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
+        
+        // Step 4: Create an updated item that includes the average PurePrcLoss
+        const mergedItem = { 
+            ...group.items[0], 
+            Designcode: `${group.items[0].Designcode} (${group.count})`, 
+            PurePrcLoss: avgPurePrcLoss 
+        };
+
+        updatedData.push(mergedItem); // Push updated item to updatedData array
+    });
+
+    // Step 5: Now that we have processed the data, update this.data with updatedData
+    // this.data = updatedData;
+
+    // Step 6: Proceed with the remaining logic for range grouping
     const groups = Object.fromEntries(ranges.map((range) => [range, { range, items: [], totalGrossLoss: 0, totalNetLoss: 0, factoryLoss: 0 }]));
 
-    this.data.forEach((item) => {
-      const range = this.getPurePrcLossRange(item.PurePrcLoss);
-      const grossLoss = parseFloat(item["Gross Loss"]) || 0;
-      const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
+    // Step 7: Group data based on PurePrcLoss ranges
+    updatedData.forEach((item) => {
+        const range = this.getPurePrcLossRange(item.PurePrcLoss);
+        const grossLoss = parseFloat(item["Gross Loss"]) || 0;
+        const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
 
-      groups[range].items.push(item);
-      groups[range].totalGrossLoss += grossLoss;
-      groups[range].totalNetLoss += netLoss;
+        groups[range].items.push(item);
+        groups[range].totalGrossLoss += grossLoss;
+        groups[range].totalNetLoss += netLoss;
     });
-    // console.log("this.datathis.data", this.data);
 
+    // Step 8: Calculate factory loss for each range group
     Object.values(groups).forEach((group) => {
-      group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
+        group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
     });
 
+    // Step 9: Return the groups that have items (filter out empty groups)
     return Object.values(groups).filter((g) => g.items.length > 0);
   }
 
-  /* Process Loss Chart */
- getDayGrouping(dateRange = {}) {
-  const start = isValid(dateRange.startDate) ? startOfDay(dateRange.startDate) : startOfDay(new Date());
-  const end = isValid(dateRange.endDate) ? endOfDay(dateRange.endDate) : start;
-  // console.log("dateRange", dateRange);
-  
-  const monthStart = startOfMonth(start);
-  const monthEnd = endOfMonth(end);
 
-  const allDates = eachDayOfInterval({ start: monthStart, end: monthEnd }).map((d) =>
-    format(d, "yyyy-MM-dd")
-  );
+  getDayGrouping(dateRange = {}) {
+    // console.log('getDayGrouping: Start grouping by day with date range:', dateRange); // Log date range
+    const start = isValid(dateRange.startDate) ? startOfDay(dateRange.startDate) : startOfDay(new Date());
+    const end = isValid(dateRange.endDate) ? endOfDay(dateRange.endDate) : start;
 
-  const groups = {};
+    const monthStart = startOfMonth(start);
+    const monthEnd = endOfMonth(end);
 
-  this.data.forEach((item) => {
-    const rawDate = new Date(item.ExportBatchDate);
-    if (!isValid(rawDate) || !isSameMonth(rawDate, start)) return;
+    const allDates = eachDayOfInterval({ start: monthStart, end: monthEnd }).map((d) =>
+      format(d, "yyyy-MM-dd")
+    );
 
-    const dateKey = format(rawDate, "yyyy-MM-dd");
-    const grossLoss = parseFloat(item["Gross Loss"]) || 0;
-    const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
+    const groups = {};
 
-    if (!groups[dateKey]) {
-      groups[dateKey] = {
-        date: dateKey,
+    this.data.forEach((item) => {
+      const rawDate = new Date(item.ExportBatchDate);
+      if (!isValid(rawDate) || !isSameMonth(rawDate, start)) return;
+
+      const dateKey = format(rawDate, "yyyy-MM-dd");
+      const grossLoss = parseFloat(item["Gross Loss"]) || 0;
+      const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
+
+      // console.log(`getDayGrouping: Processing item with ExportBatchDate ${item.ExportBatchDate}, GrossLoss ${grossLoss}, NetLoss ${netLoss}`); // Log item data
+
+      if (!groups[dateKey]) {
+        groups[dateKey] = {
+          date: dateKey,
+          items: [],
+          totalGrossLoss: 0,
+          totalNetLoss: 0,
+          factoryLoss: 0,
+        };
+      }
+
+      groups[dateKey].items.push(item);
+      groups[dateKey].totalGrossLoss += grossLoss;
+      groups[dateKey].totalNetLoss += netLoss;
+    });
+
+    const result = allDates.map((date) => {
+      const group = groups[date] || {
+        date,
         items: [],
         totalGrossLoss: 0,
         totalNetLoss: 0,
         factoryLoss: 0,
       };
-    }
 
-    groups[dateKey].items.push(item);
-    groups[dateKey].totalGrossLoss += grossLoss;
-    groups[dateKey].totalNetLoss += netLoss;
-  });
-  
-  return allDates.map((date) => {
-    const group = groups[date] || {
-      date,
-      items: [],
-      totalGrossLoss: 0,
-      totalNetLoss: 0,
-      factoryLoss: 0,
-    };
-    
-    group.factoryLoss =
-    group.totalNetLoss > 0
-      ? parseFloat(((group.totalGrossLoss / group.totalNetLoss) * 100).toFixed(3)) // Convert to number
-      : 0; 
-    
-    return group;
-  });
-}
+      group.factoryLoss =
+        group.totalNetLoss > 0
+          ? parseFloat(((group.totalGrossLoss / group.totalNetLoss) * 100).toFixed(3)) // Convert to number
+          : 0;
+
+      // console.log(`getDayGrouping: Final group for date ${date}:`, group); // Log final result for each date
+      return group;
+    });
+
+    return result;
+  }
 
   getUniqueMetalTypes() {
+    // console.log('getUniqueMetalTypes: Extracting unique metal types');
     const uniqueSet = new Set();
 
     this.data.forEach((item) => {
@@ -228,9 +253,12 @@ class FactoryLossAnalytics {
       }
     });
 
+    // console.log('getUniqueMetalTypes: Unique metal types', Array.from(uniqueSet).sort()); // Log unique metal types
     return Array.from(uniqueSet).sort();
   }
+
   getOverallFactoryLoss() {
+    // console.log('getOverallFactoryLoss: Calculating total factory loss');
     let totalGrossLoss = 0;
     let totalNetLoss = 0;
 
@@ -241,6 +269,7 @@ class FactoryLossAnalytics {
 
     const factoryLoss = totalNetLoss > 0 ? (totalGrossLoss / totalNetLoss) * 100 : 0;
 
+    // console.log('getOverallFactoryLoss: Total Gross Loss', totalGrossLoss, 'Total Net Loss', totalNetLoss, 'Factory Loss', factoryLoss); // Log final loss values
     return {
       totalGrossLoss,
       totalNetLoss,
