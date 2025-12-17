@@ -108,62 +108,68 @@ class FactoryLossAnalytics {
   }
 
   getRangeGrouping() {
-    console.log('getRangeGrouping: Start grouping by PurePrcLoss range');
-    
-    // Step 1: Declare an empty array to hold the updated data after processing
     const updatedData = [];
     
-    // Define the ranges you want to use for grouping
     const ranges = ["0 - 10%", "10 - 15%", "15 - 20%", "20 - 25%", "25 - 30%", "30 - 40%", "40 - 50%", "Above 50%"];
     
-    // Step 2: Group data by Designcode and CustomerCode and calculate the merged PurePrcLoss
+    //Group data by Designcode and CustomerCode and calculate the merged PurePrcLoss
     const groupedData = {};
     
     this.data.forEach((item) => {
-        const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
-        
-        // Clean the strings and extract PurePrcLoss and GrossPrcLoss values
-        const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
-        const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
-        
-        item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
-        item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
-
-        // Group by Designcode and CustomerCode
-        const designCustomerKey = `${item.Designcode}-${item.CustomerCode}`;
-        
-        if (!groupedData[designCustomerKey]) {
-            groupedData[designCustomerKey] = { count: 0, sumPurePrcLoss: 0, items: [] };
-        }
-
-        groupedData[designCustomerKey].count++;
-        groupedData[designCustomerKey].sumPurePrcLoss += item.PurePrcLoss;
-        groupedData[designCustomerKey].items.push(item);
+      const [purePrcLossStr, grossPrcLossStr] = (item["PurePrcLoss||GrossPrcLoss"] || "").split(" | ");
+  
+      // Clean the strings and extract PurePrcLoss and GrossPrcLoss values
+      const cleanPurePrcLossStr = purePrcLossStr.trim().replace(/[^\d.-]/g, '');
+      const cleanGrossPrcLossStr = grossPrcLossStr.trim().replace(/[^\d.-]/g, '');
+      
+      item.PurePrcLoss = parseFloat(cleanPurePrcLossStr) || 0;
+      item.GrossPrcLoss = parseFloat(cleanGrossPrcLossStr) || 0;
+  
+      const grossLoss = parseFloat(item["Gross Loss"]);
+      const netLoss = parseFloat(item["NetWt (F+M)"]);
+  
+      const validGrossLoss = isNaN(grossLoss) ? 0 : grossLoss;
+      const validNetLoss = isNaN(netLoss) ? 0 : netLoss;
+  
+      // Group by Designcode and CustomerCode
+      const designCustomerKey = `${item.Designcode}-${item.CustomerCode}`;
+      
+      if (!groupedData[designCustomerKey]) {
+          groupedData[designCustomerKey] = { count: 0, sumPurePrcLoss: 0, sumGrossLoss: 0, sumNetLoss: 0, items: [] };
+      }
+  
+      groupedData[designCustomerKey].count++;
+      groupedData[designCustomerKey].sumPurePrcLoss += item.PurePrcLoss;
+      groupedData[designCustomerKey].sumGrossLoss += validGrossLoss;
+      groupedData[designCustomerKey].sumNetLoss += validNetLoss;
+      groupedData[designCustomerKey].items.push(item);
     });
-
-    // Step 3: Process grouped data and merge the PurePrcLoss for each group
+  
     Object.values(groupedData).forEach(group => {
-        const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
-        
-        // Step 4: Create an updated item that includes the average PurePrcLoss
-        const mergedItem = { 
-            ...group.items[0], 
-            Designcode: `${group.items[0].Designcode} (${group.count})`, 
-            PurePrcLoss: avgPurePrcLoss 
-        };
-
-        updatedData.push(mergedItem); // Push updated item to updatedData array
-    });
-
-    // Step 5: Now that we have processed the data, update this.data with updatedData
+      const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
+      const realGrossLoss = group.sumNetLoss > 0 ? (group.sumGrossLoss / group.sumNetLoss) * 100 : 0;
+  
+      console.log("realGrossLoss", realGrossLoss);
+  
+      const mergedItem = { 
+          ...group.items[0], 
+          Designcode: `${group.items[0].Designcode} (${group.count})`, 
+          PurePrcLoss: avgPurePrcLoss,
+          CntedGrsPrcL: realGrossLoss 
+      };
+  
+      console.log("mergedItem", mergedItem);
+      updatedData.push(mergedItem);
+    });  
+    
+    // Now that we have processed the data, update this.data with updatedData
     // this.data = updatedData;
 
-    // Step 6: Proceed with the remaining logic for range grouping
+    // Proceed with the remaining logic for range grouping
     const groups = Object.fromEntries(ranges.map((range) => [range, { range, items: [], totalGrossLoss: 0, totalNetLoss: 0, factoryLoss: 0 }]));
 
-    // Step 7: Group data based on PurePrcLoss ranges
     updatedData.forEach((item) => {
-        const range = this.getPurePrcLossRange(item.PurePrcLoss);
+        const range = this.getPurePrcLossRange(item.CntedGrsPrcL);
         const grossLoss = parseFloat(item["Gross Loss"]) || 0;
         const netLoss = parseFloat(item["NetWt (F+M)"]) || 0;
 
@@ -172,12 +178,12 @@ class FactoryLossAnalytics {
         groups[range].totalNetLoss += netLoss;
     });
 
-    // Step 8: Calculate factory loss for each range group
+    // Calculate factory loss for each range group
     Object.values(groups).forEach((group) => {
         group.factoryLoss = group.totalNetLoss > 0 ? (group.totalGrossLoss / group.totalNetLoss) * 100 : 0;
     });
 
-    // Step 9: Return the groups that have items (filter out empty groups)
+    // Return the groups that have items (filter out empty groups)
     return Object.values(groups).filter((g) => g.items.length > 0);
   }
 

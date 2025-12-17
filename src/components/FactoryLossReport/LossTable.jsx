@@ -206,14 +206,14 @@ function PremiumTable({ selectedItems }) {
               <TableCell align="right">{item?.CustomerCode}</TableCell>
               <TableCell align="right">
                 <Chip
-                  label={`${(item?.PurePrcLoss).toFixed(2)}%`}
+                  label={`${(item?.CntedGrsPrcL).toFixed(2)}%`}
                   size="small"
                   sx={{
                     fontWeight: 500,
                     fontSize: "0.75rem",
                     height: 22,
                     borderRadius: 4,
-                    ...getChipColorStyles(item?.PurePrcLoss),
+                    ...getChipColorStyles(item?.CntedGrsPrcL),
                   }}
                 />
               </TableCell>
