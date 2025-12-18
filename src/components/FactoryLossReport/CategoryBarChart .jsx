@@ -42,7 +42,7 @@ const CategoryBarChart = ({ categoryAnalysis }) => {
   return (
     <>
       <Typography variant="h6" gutterBottom >
-        Category-wise Percentage
+        Category-Wise Loss (%)
       </Typography>
       
       <Box sx={{ flex: 1, overflowY: "auto" }}>

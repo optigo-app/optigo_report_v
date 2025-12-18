@@ -149,8 +149,6 @@ class FactoryLossAnalytics {
       const avgPurePrcLoss = group.sumPurePrcLoss / group.count;
       const realGrossLoss = group.sumNetLoss > 0 ? (group.sumGrossLoss / group.sumNetLoss) * 100 : 0;
   
-      console.log("realGrossLoss", realGrossLoss);
-  
       const mergedItem = { 
           ...group.items[0], 
           Designcode: `${group.items[0].Designcode} (${group.count})`, 
@@ -158,7 +156,6 @@ class FactoryLossAnalytics {
           CntedGrsPrcL: realGrossLoss 
       };
   
-      console.log("mergedItem", mergedItem);
       updatedData.push(mergedItem);
     });  
     

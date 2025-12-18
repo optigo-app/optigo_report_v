@@ -51,7 +51,7 @@ const Dashboard = ({ locationAnalysis }) => {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Cell Wise Loss
+        Cell-Wise Loss (%)
       </Typography>
 
       <ResponsiveContainer width="100%" height="95%" >
