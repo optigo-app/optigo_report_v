@@ -3,56 +3,67 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Checkbox,
-  ListItemText,
   OutlinedInput,
   ThemeProvider,
   Box,
   Chip,
   Typography,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
 import { Datetheme } from "../../libs/data";
 
-const MAX_DISPLAY_CHIPS = 2;
-
-export default function MetTypeSelect({ selected = [], onChange, MetalTypeList = [], disabled }) {
-  const renderSelected = (selectedItems) => {
-    if (selectedItems.length === 0) return "";
-
-    const visibleChips = selectedItems.slice(0, MAX_DISPLAY_CHIPS);
-    const extraCount = selectedItems.length - MAX_DISPLAY_CHIPS;
-
+export default function MetTypeSelect({ selected = "", onChange, MetalTypeList = [], disabled }) {
+  const renderSelected = (value) => {
+    if (!value) return "";
     return (
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-        {visibleChips.map((item) => (
-          <Chip
-            key={item}
-            label={<Typography variant="caption">{item}</Typography>}
-            size="small"
-          />
-        ))}
-        {extraCount > 0 && (
-          <Chip
-            label={<Typography variant="caption">+{extraCount} more</Typography>}
-            size="small"
-          />
-        )}
-      </Box>
+      <Chip
+        label={<Typography variant="caption">{value}</Typography>}
+        size="small"
+      />
     );
   };
+  const handleChange = (event) => {
+    onChange(event.target.value);
+  };    
 
   return (
     <ThemeProvider theme={Datetheme}>
       <Box sx={{ bgcolor: "#fff" }}>
-        <FormControl sx={{ minWidth: 300 }} size="small" disabled={disabled}>
+        <FormControl sx={{ minWidth: 240 }} size="small" disabled={disabled}>
           <InputLabel id="mettype-label">Metal Type</InputLabel>
           <Select
             labelId="mettype-label"
-            multiple
             disabled={disabled}
             value={selected}
-            onChange={onChange}
-            input={<OutlinedInput label="Metal Type" />}
+            onChange={handleChange}
+            input={
+              <OutlinedInput
+                label="Metal Type"
+                endAdornment={
+                  selected ? (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        sx={{
+                          p: 0.7,
+                          mr: 1.5,
+                          width: 30
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onChange("");
+                        }}
+                      >
+                        <ClearIcon fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  ) : null
+                }
+              />
+            }
             renderValue={renderSelected}
             MenuProps={{
               PaperProps: {
@@ -64,8 +75,7 @@ export default function MetTypeSelect({ selected = [], onChange, MetalTypeList =
           >
             {MetalTypeList.map((type) => (
               <MenuItem key={type} value={type}>
-                <Checkbox checked={selected.indexOf(type) > -1} />
-                <ListItemText primary={type} />
+                {type}
               </MenuItem>
             ))}
           </Select>

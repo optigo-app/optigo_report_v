@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Box, Grid, Typography, Paper, Alert } from "@mui/material";
+import { useMemo, useState, useEffect } from "react";
+import { Box, Grid, Typography, Paper, IconButton, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CategoryBarChart from "./CategoryBarChart ";
 import LossTable from "./LossTable";
@@ -13,6 +13,7 @@ import { useFactoryLoss } from "./../../context/FactoryLossReport";
 import { filterFactoryLossData } from "../../libs/FactoryLossFilter";
 import { eachMonthOfInterval, startOfMonth, endOfMonth, differenceInMonths, format, isValid } from "date-fns";
 import Loader from "../shared/Loader";
+import RefreshButton from './RefreshButton';
 
 const Header = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -34,13 +35,13 @@ export default function FactoryLossReport() {
   const defaultStart = startOfMonth(new Date());
   const defaultEnd = endOfMonth(new Date());
   const defaultSelectedDate = { startDate: defaultStart, endDate: defaultEnd };
-
-  const [selectedTypes, setSelectedTypes] = useState([]);
   const [dateRange, setDateRange] = useState(defaultSelectedDate);
+  const [selectedTypes, setSelectedTypes] = useState("");
+  const [refreshLoading, setRefreshLoading] = useState(false);
 
   const isDateRangeValid = useMemo(() => {
     return isValid(dateRange.startDate) && isValid(dateRange.endDate);
-  }, [dateRange]); 
+  }, [dateRange]);
 
   const isMultiMonth = differenceInMonths(dateRange.endDate, dateRange.startDate) >= 1;
 
@@ -59,9 +60,13 @@ export default function FactoryLossReport() {
 
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
 
-  // Only set activeRange if monthsList is not empty
   const activeRange = monthsList.length > 0 ? monthsList[currentMonthIndex] : null;
   const monthLabel = activeRange ? format(activeRange.start, "MMMM yyyy") : '';
+
+  const MetalTypeList = useMemo(() => {
+    const baseAnalytics = new FactoryLossAnalytics(rawData);
+    return baseAnalytics.getUniqueMetalTypes();
+  }, [rawData]);
 
   const filtered = useMemo(() => {
     if (isDateRangeValid) {
@@ -83,28 +88,39 @@ export default function FactoryLossReport() {
   const locationAnalysis = analytics.getLocationGrouping();
   const PureGrossLoss = analytics.getOverallFactoryLoss();
 
-  const MetalTypeList = useMemo(() => {
-    const baseAnalytics = new FactoryLossAnalytics(rawData);
-    return baseAnalytics.getUniqueMetalTypes();
-  }, [rawData]);
+  const [categoryWiseAnalysis, setCategoryWiseAnalysis] = useState([]);
+  const [dayWiseAnalysis, setDayWiseAnalysis] = useState([]);
+  const [rangeWiseAnalysis, setRangeWiseAnalysis] = useState([]);
+  const [locationWiseAnalysis, setLocationWiseAnalysis] = useState([]);
+  const [PureGrossLossWise, setPureGrossLossWise] = useState(0);
 
   if (!rawData) {
     return <Loader msg="Loading Factory Loss Data" />;
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 2 }, pb: { xs: 2, lg: 0 }, bgcolor: "#f9f9fb", height: "100%", overflowY: "auto" }}>
+    <Box sx={{ p: { xs: 2, md: 2 }, pb: { xs: 2, lg: 0 }, position: "relative", bgcolor: "#f9f9fb", height: "100%", overflowY: "auto" }}>
       <Header>
         <Typography variant="h5" fontWeight={600}>
           Factory Floor Loss Analysis
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap", mt: { xs: 2, sm: 0 } }}>
+          <RefreshButton
+            selectedTypes={selectedTypes}
+            dateRange={dateRange}
+            setCategoryWiseAnalysis={setCategoryWiseAnalysis}
+            setDayWiseAnalysis={setDayWiseAnalysis}
+            setRangeWiseAnalysis={setRangeWiseAnalysis}
+            setLocationWiseAnalysis={setLocationWiseAnalysis}
+            setPureGrossLossWise={setPureGrossLossWise}
+            setLoadingComp={setRefreshLoading}
+          />
           <RangeDatePicker value={dateRange} onChange={setDateRange} />
           <MetTypeSelect
             MetalTypeList={MetalTypeList}
             selected={selectedTypes}
-            onChange={(e) => setSelectedTypes(e.target.value)}
+            onChange={setSelectedTypes}
             disabled={!isDateRangeValid} 
           />
           <PureLossAnalyticsCard PureGrossLoss={PureGrossLoss} />
@@ -167,6 +183,26 @@ export default function FactoryLossReport() {
             Please select a valid date range.
           </Typography>
         </Box>
+      )}
+
+      {refreshLoading && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              bgcolor: "rgba(255, 255, 255, 0.22)",
+              backdropFilter: "blur(2px)",
+              zIndex: 10,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress size={60} color="primary" />
+          </Box>
       )}
     </Box>
   );
