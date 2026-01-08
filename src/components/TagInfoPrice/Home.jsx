@@ -133,6 +133,7 @@ function Home() {
       })
       : null
   );
+  // console.log("products", products);
 
   useEffect(() => {
     if (scannerInputRef.current) {

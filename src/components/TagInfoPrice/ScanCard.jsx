@@ -16,6 +16,11 @@ const ScanCard = ({ product }) => {
       <Grid item xs={12} sm={6} md={4} key={product?.ArticleId}>
         <Card variant="outlined" sx={{ height: "100%"}}>
           <CardContent sx={{pb:"16px !important" }} >
+            {product?.Title !== "" && (
+              <Typography variant="h6" fontWeight="bold" color="primary" sx={{ mb: 1, borderBottom: (theme) => `1px solid ${theme.palette.divider}`, }}>
+                {product?.Title}
+              </Typography>
+            )}
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
               <Typography variant="h6" component="div">
                 {product?.["Metal Type"]} • {product?.["Metal Color"]}

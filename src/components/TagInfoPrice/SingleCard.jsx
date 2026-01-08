@@ -4,6 +4,7 @@ import TableSection from "./MaterialTable";
 import NoImage from "../../assets/no.jpg";
 
 const SingleCard = ({ SelectedJob, setShowAll }) => {
+  // console.log("SelectedJob", SelectedJob);
   return (
     <>
       {/* Header Notice */}
@@ -51,6 +52,11 @@ const SingleCard = ({ SelectedJob, setShowAll }) => {
         }}
       >
         <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+
+          <Typography variant="h6" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+            {SelectedJob?.Title}
+          </Typography>
+
           <Grid container spacing={{ xs: 2, sm: 3 }}>
             {/* Left: Image */}
             <Grid item xs={12} md={4}>
