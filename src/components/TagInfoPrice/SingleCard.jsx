@@ -5,6 +5,21 @@ import NoImage from "../../assets/no.jpg";
 
 const SingleCard = ({ SelectedJob, setShowAll }) => {
   // console.log("SelectedJob", SelectedJob);
+
+  // Rounding Logic
+  const priceMrp = Number(SelectedJob?.priceMrp || 0);
+  const taxTotal = Number(SelectedJob?.tax?.total || 0);
+  let total = priceMrp + taxTotal;
+
+  const integerPart = Math.floor(total);
+  const decimalPart = total - integerPart;
+
+  if (decimalPart >= 0.50) {
+    total = Math.ceil(total);
+  } else {
+    total = integerPart;
+  }
+
   return (
     <>
       {/* Header Notice */}
@@ -53,7 +68,7 @@ const SingleCard = ({ SelectedJob, setShowAll }) => {
       >
         <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
 
-          <Typography variant="h6" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+          <Typography variant="h5" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
             {SelectedJob?.Title}
           </Typography>
 
@@ -202,10 +217,7 @@ const SingleCard = ({ SelectedJob, setShowAll }) => {
                       </Typography>
                       <Typography variant="body1" fontWeight="bold">
                         ₹
-                        {(
-                          Number(SelectedJob?.priceMrp || 0) +
-                          Number(SelectedJob?.tax?.total || 0)
-                        ).toFixed(2)}
+                        {total}
                       </Typography>
                     </Box>
                   </Box>
