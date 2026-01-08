@@ -1,8 +1,8 @@
 export const filterFactoryLossData = (data = [], filters = {}) => {
   if (!Array.isArray(data) || data.length === 0) return [];
-
   const {
     metalTypes = [], 
+    metalFilterApplied = false,
     date = {}, 
   } = filters;
 
@@ -21,10 +21,31 @@ export const filterFactoryLossData = (data = [], filters = {}) => {
   };
 
   return data.filter((entry) => {
+  // console.log("Selected metalTypes:", metalTypes);
+
     try {
       const entryMetalType = entry?.MetalType?.trim()?.split(" ")[0]?.toUpperCase() || "";
+      // console.log("Entry metal:", entryMetalType);
 
-      const matchesMetalType = metalTypes.length === 0 ? true : metalTypes.includes(entryMetalType);
+      const normalizedMetalTypes = Array.isArray(metalTypes)
+        ? metalTypes.map(m => m.toUpperCase())
+        : [];
+
+        let matchesMetalType;
+        if (!metalFilterApplied) {
+          // nothing selected → show all
+          matchesMetalType = true;
+        } else {
+          // user selected something → strict match only
+          matchesMetalType =
+            normalizedMetalTypes.length > 0 &&
+            normalizedMetalTypes.includes(entryMetalType);
+        }
+      // const matchesMetalType =
+      //   metalTypes.length === 0
+      //     ? false
+      //     : metalTypes.includes(entryMetalType);
+
       const entryDate = parseDate(entry?.ExportBatchDate);
       if (!entryDate) return false;
 

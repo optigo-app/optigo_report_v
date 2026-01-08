@@ -29,6 +29,8 @@ export default function MetTypeSelect({ selected = "", onChange, MetalTypeList =
     onChange(event.target.value);
   };    
 
+  // console.log("MetalTypeList", MetalTypeList);
+  
   return (
     <ThemeProvider theme={Datetheme}>
       <Box sx={{ bgcolor: "#fff" }}>

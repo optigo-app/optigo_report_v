@@ -1,11 +1,11 @@
 // src/components/RefreshButton.js
 import React, { useState } from 'react';
 import { Box, Button, styled } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { useFactoryLoss } from './../../context/FactoryLossReport';
 import FactoryLossAnalytics from '../../analytics/FactoryLossAnalytics';
 import { filterFactoryLossData } from '../../libs/FactoryLossFilter';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import { keyframes } from '@mui/system';
 
 export default function RefreshButton({
   selectedTypes, 
@@ -43,7 +43,7 @@ export default function RefreshButton({
 
       setInternalLoading(false);
       setLoadingComp(false);
-    }, 1000);
+    }, 1500);
   };
 
   const RefreshButtonStyled = styled(Button)(({ theme }) => ({
@@ -65,11 +65,25 @@ export default function RefreshButton({
     },
   }));
 
+  const spin = keyframes`
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  `;
+
+  const RotatingAutorenewIcon = styled(AutorenewIcon)(({ loading }) => ({
+    animation: loading ? `${spin} 1s linear infinite` : 'none',
+  }));
+
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
      <RefreshButtonStyled
         onClick={handleRefresh}
-        startIcon={<AutorenewIcon />}
+        startIcon={<RotatingAutorenewIcon loading={internalLoading ? 1 : 0} />}
+        // startIcon={<AutorenewIcon />}
       >
         Refresh
       </RefreshButtonStyled>
