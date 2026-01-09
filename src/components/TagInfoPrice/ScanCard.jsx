@@ -28,13 +28,38 @@ const ScanCard = ({ product }) => {
   return (
     <>
       <Grid item xs={12} sm={6} md={4} key={product?.ArticleId}>
-        <Card variant="outlined" sx={{ height: "100%"}}>
-          <CardContent sx={{pb:"16px !important" }} >
-            {product?.Title !== "" && (
-              <Typography variant="h5" fontWeight="bold" color="primary" sx={{ mb: 1, borderBottom: (theme) => `1px solid ${theme.palette.divider}`, }}>
-                {product?.Title}
+        <Card variant="outlined" sx={{ height: "100%", boxShadow: "rgba(99, 99, 99, 0.2) 0px 1px 2px 0px" }}>
+            {product?.Title !== "" ? (
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                color="primary"
+                sx={{
+                  mb: 1,
+                  // borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+                  backgroundColor: '#F0F2FF',
+                  p: 1.5,
+                }}
+              >
+                {product?.Title !== "" ? product?.Title : ""}
               </Typography>
+            ) : (
+                <Typography
+                  variant="h5"
+                  fontWeight="bold"
+                  color="primary"
+                  sx={{
+                    height: "55px",
+                    mb: 1,  
+                    // borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+                    // backgroundColor: 'rgba(128, 0, 128, 0.06)',
+                    backgroundColor: '#F0F2FF', // E1E3FD, D1D4FB
+                    p: 1.5,
+                  }}
+                >
+                </Typography>
             )}
+          <CardContent sx={{pb:"16px !important" }} >
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
               <Typography variant="h6" component="div" sx={{ color: "rgb(34 34 34 / 81%)" }}>
                 {product?.["Metal Type"]} • {product?.["Metal Color"]}

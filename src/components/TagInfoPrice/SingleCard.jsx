@@ -66,11 +66,36 @@ const SingleCard = ({ SelectedJob, setShowAll }) => {
           border: "1px solid #e0e0e0",
         }}
       >
-        <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-
-          <Typography variant="h5" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+        {SelectedJob?.Title !== "" ? (
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="primary"
+            sx={{
+              mb: 1,  
+              // borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+              // backgroundColor: 'rgba(128, 0, 128, 0.04)',
+              backgroundColor: '#F0F2FF', // E1E3FD, D1D4FB
+              p: 1.5,
+            }}
+          >
             {SelectedJob?.Title}
           </Typography>
+        ) : (
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="primary"
+            sx={{
+              height: "55px",
+              mb: 1,  
+              // borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+              backgroundColor: '#F0F2FF', // E1E3FD, D1D4FB
+              p: 1.5,
+            }}
+          ></Typography>
+        )}
+        <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
 
           <Grid container spacing={{ xs: 2, sm: 3 }}>
             {/* Left: Image */}
