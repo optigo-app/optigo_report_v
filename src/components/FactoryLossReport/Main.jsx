@@ -36,7 +36,7 @@ export default function FactoryLossReport() {
   const defaultEnd = endOfMonth(new Date());
   const defaultSelectedDate = { startDate: defaultStart, endDate: defaultEnd };
   const [dateRange, setDateRange] = useState(defaultSelectedDate);
-  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState("");
   const [refreshLoading, setRefreshLoading] = useState(false);
   const [metalFilterApplied, setMetalFilterApplied] = useState(false);
 
@@ -69,10 +69,10 @@ export default function FactoryLossReport() {
     return baseAnalytics.getUniqueMetalTypes();
   }, [rawData]);
 
-  const onMetalChange = (values) => {
-    const normalized = Array.isArray(values) ? values : [values];
-    setSelectedTypes(normalized);
-    setMetalFilterApplied(true);
+  const onMetalChange = (value) => {
+    // const normalized = Array.isArray(value) ? value : [value];
+    setSelectedTypes(value);
+    // setMetalFilterApplied(true);
   };
   
   const onClearMetal = () => {
@@ -80,17 +80,27 @@ export default function FactoryLossReport() {
     setMetalFilterApplied(false);
   };
 
+  // const filtered = useMemo(() => {
+  //   if (isDateRangeValid) {
+  //     return filterFactoryLossData(rawData, {
+  //       metalTypes: selectedTypes,
+  //       metalFilterApplied,
+  //       date: dateRange,                      bug solved when click on clear metal type selection that time its not clearing all
+  //     });
+  //   }
+  //   return [];
+  // }, [rawData, selectedTypes, metalFilterApplied, dateRange, isDateRangeValid]);
+
   const filtered = useMemo(() => {
-    if (isDateRangeValid) {
-      return filterFactoryLossData(rawData, {
-        metalTypes: selectedTypes,
-        metalFilterApplied,
-        date: dateRange,
-      });
-    }
-    return [];
-  }, [rawData, selectedTypes, metalFilterApplied, dateRange, isDateRangeValid]);
-  console.log("filtered", filtered);
+    if (!isDateRangeValid) return [];
+  
+    return filterFactoryLossData(rawData, {
+      metalTypes: selectedTypes ? [selectedTypes] : [],
+      metalFilterApplied: Boolean(selectedTypes),
+      date: dateRange,
+    });
+  }, [rawData, selectedTypes, dateRange, isDateRangeValid]);
+  // console.log("filtered", filtered);
 
   const analytics = new FactoryLossAnalytics(filtered);
   const categoryAnalysis = analytics.getCategoryGrouping();
@@ -136,7 +146,7 @@ export default function FactoryLossReport() {
             selected={selectedTypes}
             // onChange={setSelectedTypes}
             onChange={onMetalChange}
-            onClear={onClearMetal}
+            // onClear={onClearMetal}
             disabled={!isDateRangeValid} 
           />
           <PureLossAnalyticsCard PureGrossLoss={PureGrossLoss} />
