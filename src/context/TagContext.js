@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import ReportAPI from "../apis/ReportAPI";
+import { sortProductsByMetal } from "../constants/SortingOptions";
 
 const TagContext = createContext();
 export const useTagContext = () => useContext(TagContext);
@@ -102,12 +103,7 @@ export const TagContextProvider = ({ children }) => {
 
       if (!enrichedProducts?.length) return [];
 
-      return [...enrichedProducts].sort((a, b) => {
-        const articleA = String(a?.["Article No"] ?? "");
-        const articleB = String(b?.["Article No"] ?? "");
-        return articleA.localeCompare(articleB);
-      });
-      // return enrichedProducts;
+      return sortProductsByMetal(enrichedProducts);
     } catch (error) {
       console.error("GetTagReport failed", error);
       return [];

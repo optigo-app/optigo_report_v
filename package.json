@@ -115,7 +115,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "cross-env GENERATE_SOURCEMAP=false react-scripts --max_old_space_size=6144 build",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "sort-test": "node test_case/sorting_test.js"
   },
   "eslintConfig": {
     "extends": [
