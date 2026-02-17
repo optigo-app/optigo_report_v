@@ -100,7 +100,14 @@ export const TagContextProvider = ({ children }) => {
         })
       );
 
-      return enrichedProducts;
+      if (!enrichedProducts?.length) return [];
+
+      return [...enrichedProducts].sort((a, b) => {
+        const articleA = String(a?.["Article No"] ?? "");
+        const articleB = String(b?.["Article No"] ?? "");
+        return articleA.localeCompare(articleB);
+      });
+      // return enrichedProducts;
     } catch (error) {
       console.error("GetTagReport failed", error);
       return [];
