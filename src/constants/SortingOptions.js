@@ -31,6 +31,17 @@ export const sortProductsByMetal = (products) => {
   };
 
   return [...products].sort((a, b) => {
+    const orderA = parseInt(a?.DisplayOrder, 10) || 0;
+    const orderB = parseInt(b?.DisplayOrder, 10) || 0;
+
+    if (orderA > 0 && orderB > 0) {
+      if (orderA !== orderB) return orderA - orderB;
+    } else if (orderA > 0) {
+      return -1;
+    } else if (orderB > 0) {
+      return 1;
+    }
+
     const prioA = getMetalPriority(a?.["Metal Type"], a?.Metalquality);
     const prioB = getMetalPriority(b?.["Metal Type"], b?.Metalquality);
 

@@ -5,9 +5,9 @@ import ThemeWrapper from "../shared/ThemeWrapper";
 const index = () => {
   return (
     <>
-        <ThemeWrapper>
-          <TagInfoPrice />
-        </ThemeWrapper>
+      <ThemeWrapper>
+        <TagInfoPrice />
+      </ThemeWrapper>
     </>
   );
 };
