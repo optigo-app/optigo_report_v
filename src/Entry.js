@@ -15,9 +15,9 @@ export function setUrlAndCookie(CN, cookieName, cookieValue) {
   if (typeof window === "undefined" || !cookieValue) return;
   const url = new URL(window.location.href);
   url.searchParams.set("CN", CN);
-  window.history.replaceState({}, "", url.toString()); 
+  window.history.replaceState({}, "", url.toString());
   const expires = new Date();
-  expires.setDate(expires.getDate() + 1); 
+  expires.setDate(expires.getDate() + 1);
   document.cookie = `${cookieName}=${encodeURIComponent(
     cookieValue
   )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
@@ -53,16 +53,16 @@ export default function Entry() {
   // RDSD_20251027090005_b56644f68b614c3283ac268bceb15944
   // %7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18300%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22NA%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22MTg5Mjk%3d%22%2c%22LUId%22%3a%22dnZrQG56ZW4uY29t%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%2c%22YearCode%22%3a%22e3tuemVufX17ezIwfX17e29yYWlsMjV9fXt7b3JhaWwyNX19%22%2c%22cuVer%22%3a%22UjUwQjM%3d%22%2c%22rptapiurl%22%3a%22aHR0cDovL25ld25leHRqcy53ZWIvYXBpL3JlcG9ydA%3d%3d%22%7d
 
-  // useEffect(()=>{
-  //   // Nine Tag
-  //   if(process.env.NODE_ENV === 'development'){
-  //   setUrlAndCookie(
-  //     "UkRTRF8yMDI1MDkwOTExMDM1NV9kODAxNWJmZmRkMDc0NDRiOGQzOTQ4NDVlNDg1OTZlNw==",
-  //     "RDSD_20250909110355_d8015bffdd07444b8d394845e48596e7",
-  //     `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18329%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22Ng%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%7d`
-  //   )
-  // }
-  // },[])
+  useEffect(() => {
+    // Nine Tag
+    if (process.env.NODE_ENV === 'development') {
+      setUrlAndCookie(
+        "UkRTRF8yMDI1MDkwOTExMDM1NV9kODAxNWJmZmRkMDc0NDRiOGQzOTQ4NDVlNDg1OTZlNw==",
+        "RDSD_20250909110355_d8015bffdd07444b8d394845e48596e7",
+        `%7b%22tkn%22%3a%22OTA2NTQ3MTcwMDUzNTY1MQ%3d%3d%22%2c%22pid%22%3a18329%2c%22IsEmpLogin%22%3a0%2c%22IsPower%22%3a0%2c%22SpNo%22%3a%22Ng%3d%3d%22%2c%22SpVer%22%3a%22%22%2c%22SV%22%3a%22MA%3d%3d%22%2c%22LId%22%3a%22NQ%3d%3d%22%2c%22LUId%22%3a%22YWRtaW5Ab3JhaWwuY28uaW4%3d%22%2c%22DAU%22%3a%22aHR0cDovL256ZW4vam8vYXBpLWxpYi9BcHAvQ2VudHJhbEFwaQ%3d%3d%22%7d`
+      )
+    }
+  })
 
   // useEffect(()=>{
   //   // Sales Analysis
