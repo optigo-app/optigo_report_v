@@ -26,17 +26,18 @@ const CustomBarLabel = ({ x, y, width, value }) => {
 const CategoryBarChart = ({ categoryAnalysis }) => {
   // console.log("categoryAnalysis", categoryAnalysis);
 
-  const formattedData = categoryAnalysis
-    ?.map((val) => {
+  const formattedData = (categoryAnalysis ?? [])
+    .map((val) => {
       const loss = Number(val?.factoryLoss);
-      const percentage = isNaN(loss) ? 0 : +loss.toFixed(2);  // + converts string to number
+      const percentage = isNaN(loss) ? 0 : +loss.toFixed(2); // + converts string to number
       return {
         category: val?.category ?? "Unknown",
         percentage: percentage,
         fill: percentage > 10 ? `url(#${redGradientId})` : `url(#${blueGradientId})`,
       };
     })
-    .filter((data) => data.percentage !== 0);
+    .filter((data) => data.percentage !== 0)
+    .sort((a, b) => b.percentage - a.percentage);
 
   // console.log("formattedData", formattedData);
   return (

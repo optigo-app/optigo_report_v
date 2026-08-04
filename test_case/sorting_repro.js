@@ -1,4 +1,4 @@
-export const sortProductsByMetal = (products) => {
+const sortProductsByMetal = (products) => {
   const extractNumber = (str) => {
     const match = String(str || "").match(/\d+/);
     return match ? parseInt(match[0], 10) : null;
@@ -9,24 +9,9 @@ export const sortProductsByMetal = (products) => {
     const qualityStr = String(metalQuality || "").trim();
     const numericValue = extractNumber(qualityStr);
 
-    // Gold Check
-    if (type.includes("GOLD")) {
-      // Gold usually sorted ascending by K value: 9, 10, 14, 18, 22, 24
-      return { category: 1, qualityIndex: numericValue !== null ? numericValue : 999 };
-    }
-
-    // Silver Check
-    if (type.includes("SILVER") || qualityStr.toLowerCase().startsWith("s")) {
-      // Silver usually sorted descending: 999, 925, 800, 750
-      return { category: 2, qualityIndex: numericValue !== null ? -numericValue : 0 };
-    }
-
-    // Platinum Check
-    if (type.includes("PLATINUM") || qualityStr.includes("95") || qualityStr.includes("85")) {
-      // Platinum usually sorted descending: 95, 85
-      return { category: 3, qualityIndex: numericValue !== null ? -numericValue : 0 };
-    }
-
+    if (type.includes("GOLD")) return { category: 1, qualityIndex: numericValue !== null ? numericValue : 999 };
+    if (type.includes("SILVER") || qualityStr.toLowerCase().startsWith("s")) return { category: 2, qualityIndex: numericValue !== null ? -numericValue : 0 };
+    if (type.includes("PLATINUM") || qualityStr.includes("95") || qualityStr.includes("85")) return { category: 3, qualityIndex: numericValue !== null ? -numericValue : 0 };
     return { category: 4, qualityIndex: 0 };
   };
 
@@ -36,7 +21,6 @@ export const sortProductsByMetal = (products) => {
     return `${type}||${quality}`;
   };
 
-  // ── Step 1: Separate DisplayOrder=0 items from all other items ───────────
   const zeroOrderItems = [];
   const restItems = [];
 
@@ -49,10 +33,6 @@ export const sortProductsByMetal = (products) => {
     }
   });
 
-  // ── Step 2: Sort restItems using the OLD logic ────────────────────────────
-  //   - DisplayOrder > 0  → sorted ascending by DisplayOrder
-  //   - No DisplayOrder   → sorted by metal priority (category + qualityIndex)
-  //   - Fallback          → Article No
   const sorted = [...restItems].sort((a, b) => {
     const orderA = parseInt(a?.DisplayOrder, 10);
     const orderB = parseInt(b?.DisplayOrder, 10);
@@ -76,15 +56,6 @@ export const sortProductsByMetal = (products) => {
     return String(a?.["Article No"] ?? "").localeCompare(String(b?.["Article No"] ?? ""));
   });
 
-  // ── Step 3: Inject DisplayOrder=0 items ──────────────────────────────────
-  //
-  // Rule A – If this metal group (Metal Type + Metalquality) EXISTS in the
-  //           sorted list: insert the zero item right AFTER the FIRST
-  //           occurrence of that group.
-  //
-  // Rule B – If the group does NOT exist in the sorted list (orphan):
-  //           collect separately → sort by metal priority → prepend to front.
-
   const zeroGroups = {};
   zeroOrderItems.forEach(z => {
     const key = getGroupKey(z);
@@ -97,7 +68,7 @@ export const sortProductsByMetal = (products) => {
 
   for (const item of sorted) {
     finalSorted.push(item);
-
+    
     const key = getGroupKey(item);
     if (zeroGroups[key] && !insertedZeroGroups.has(key)) {
       finalSorted.push(...zeroGroups[key]);
@@ -123,32 +94,21 @@ export const sortProductsByMetal = (products) => {
   return [...finalSorted, ...orphans];
 };
 
-export const GetTagReport = async (jobNo, MasterData, GetTaxMaster, Report, TaxCalculator) => {
-  try {
-    if (!MasterData.HSN.length && !MasterData.Tax.length) await GetTaxMaster();
+const data = [
+  { "Article No":"GH-31_8G",  "Metal Type":"GOLD 18K",   "Metalquality":"18K",  "Title":"amp3",         "DisplayOrder":300 },
+  { "Article No":"GH-31_9G",  "Metal Type":"GOLD 9K",    "Metalquality":"9K",   "Title":"amp1",         "DisplayOrder":1   },
+  { "Article No":"GH-31_10S", "Metal Type":"SILVER S925","Metalquality":"S925", "Title":"",             "DisplayOrder":0   },
+  { "Article No":"GH-31_11G", "Metal Type":"GOLD 22K",   "Metalquality":"22K",  "Title":"",             "DisplayOrder":0   },
+  { "Article No":"GH-31_2G",  "Metal Type":"GOLD 22K",   "Metalquality":"22K",  "Title":"D_New",        "DisplayOrder":50  },
+  { "Article No":"GH-31_5G",  "Metal Type":"GOLD 22K",   "Metalquality":"22K",  "Title":"Testing_size", "DisplayOrder":200 },
+  { "Article No":"GH-31_7G",  "Metal Type":"GOLD 22K",   "Metalquality":"22K",  "Title":"amp4",         "DisplayOrder":0   },
+];
 
-    const res = await Report.request("GetScanJobData", { jobno: jobNo });
-    if (res?.Status === 202 || res?.Message === "Data Not Found") {
-      return {
-        status: 202,
-        message: "Data Not Found",
-        data: [],
-      };
-    }
-    const enrichedProducts = await Promise.all(
-      (res?.Data?.DT || []).map(async (pd) => {
-        const tax = await TaxCalculator(pd?.ToolItemId, pd);
-        return { ...pd, tax };
-      })
-    );
-
-    if (!enrichedProducts?.length) return [];
-
-    return sortProductsByMetal(enrichedProducts);
-  } catch (error) {
-    console.error("GetTagReport failed", error);
-    return [];
-  }
-};
-
-// TESTING JOBNO = 1/1236
+console.log('── Final Sorted Output ─────────────────────────────────────────');
+console.log('  #  | Article      | Order | Quality | Title');
+console.log('  '+'─'.repeat(55));
+const out = sortProductsByMetal(data);
+out.forEach((p,i)=>{
+  const tag = parseInt(p.DisplayOrder,10)===0 ? ' ← zero (injected)' : '';
+  console.log(`  ${String(i+1).padEnd(3)}| ${p['Article No'].padEnd(12)}| ${String(p.DisplayOrder).padEnd(5)} | ${p.Metalquality.padEnd(7)} | ${p.Title}${tag}`);
+});

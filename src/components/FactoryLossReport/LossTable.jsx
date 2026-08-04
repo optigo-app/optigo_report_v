@@ -92,7 +92,7 @@ const LossTableWithPopover = ({ rangeAnalysis }) => {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Design-Wise Loss (%)
+        Average (%) Loss By Design
       </Typography>
       <ResponsiveContainer width="100%" height="95%">
         <PieChart>

@@ -160,14 +160,15 @@ export default function FactoryLossReport() {
           <Grid item xs={12} sx={{ height: "50%", pt: 0 }}>
             <Grid container columnSpacing={2} sx={{ height: "100%" }}>
               <Grid item md={4} xs={12} key={1} sx={{ height: "100%" }}>
-                <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                  <CategoryBarChart categoryAnalysis={categoryAnalysis} />
+                    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                  <LossTable rangeAnalysis={rangeAnalysis} />
                 </Card>
+              
               </Grid>
               {/* Second Row */}
               <Grid item md={4} xs={12} key={2} sx={{ height: "100%" }}>
                 <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                  <LossTable rangeAnalysis={rangeAnalysis} />
+                  <CategoryBarChart categoryAnalysis={categoryAnalysis} />
                 </Card>
               </Grid>
               {/* Third Row */}
