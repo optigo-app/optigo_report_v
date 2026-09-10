@@ -23,6 +23,12 @@ const normalizeDate = (input) => {
     "d MMM yyyy",    // 15 Jul 2025
     "dd MMM yyyy",   // 01 Aug 2025
     "MMM d, yyyy",   // Jul 15, 2025
+    "dd/MMM/yy",     // 12/May/26
+    "d/MMM/yy",      // 1/May/26
+    "dd/MMM/yyyy",   // 12/May/2026
+    "d/MMM/yyyy",    // 1/May/2026
+    "dd-MMM-yy",     // 12-May-26
+    "d-MMM-yy",      // 1-May-26
   ];
 
   for (const format of knownFormats) {

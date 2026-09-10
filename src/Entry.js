@@ -6,6 +6,7 @@ import OrderCompletionReport from "./components/OrderCompletionReport";
 import QuoteAnalysisReport from "./components/QuoteAnalysisReport";
 import SalesAnalysisReport from "./components/SalesAnalysisReport";
 import TagInfoPriceReport from "./components/TagInfoPrice";
+import QCAnalysisReport from "./components/QcAnalysisReport"
 import ReportAPI from "./apis/ReportAPI";
 import Loader from "./components/shared/Loader";
 import { readAndDecodeCookie } from "./libs/CookieReader";
@@ -178,29 +179,30 @@ export default function Entry() {
       18315: QuoteAnalysisReport,
       18314: SalesAnalysisReport,
       18329: TagInfoPriceReport,
+      18900:QCAnalysisReport
     }),
     []
   );
 
   // Loader
-  if (queryData === null && !error) {
-    return <Loader msg="Setting up report" />;
-  }
+  // if (queryData === null && !error) {
+  //   return <Loader msg="Setting up report" />;
+  // }
 
-  if (error) {
-    return (
-      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh" gap={1}>
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Please check your URL or cookie settings.
-        </Typography>
-      </Box>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh" gap={1}>
+  //       <Typography variant="h6" color="error">
+  //         {error}
+  //       </Typography>
+  //       <Typography variant="body2" color="text.secondary">
+  //         Please check your URL or cookie settings.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
 
-  const SelectedReport = reportMap[queryData?.pid];
+  const SelectedReport = reportMap[18900 || queryData?.pid];
 
   if (!SelectedReport) {
     return (
